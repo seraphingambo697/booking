@@ -103,6 +103,9 @@ const MOCK_HOTELS: Hotel[] = [
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export class HotelRepository implements IHotelRepository {
+    findByCity(city: string): Promise<Hotel[]> {
+        throw new Error("Method not implemented.");
+    }
     async findAll(params: SearchParams): Promise<Hotel[]> {
         await delay(600); // Simule ~600ms de latence réseau
 

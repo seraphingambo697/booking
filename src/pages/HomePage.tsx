@@ -16,10 +16,10 @@ import { useNavigate } from "react-router-dom";
 import { Building2, Shield, HeadphonesIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SearchBar } from "@/components/search/SearchBar";
 import { useSearch } from "@/hooks/useSearch";
 import { useSearchStore } from "@/store/searchStore";
 import { ROUTES } from "@/router/routes";
+import { SearchBar } from "@/components/search/SearchBar";
 
 export function HomePage() {
     const navigate = useNavigate();

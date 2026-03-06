@@ -10,10 +10,10 @@ import { Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { HotelCard, HotelCardSkeleton } from "@/components/hotel/HotelCard";
-import { SearchFilters } from "@/components/search/SearchFilters";
 import { useHotelList } from "@/hooks/useHotelList";
 import { useSearchStore } from "@/store/searchStore";
 import { ROUTES } from "@/router/routes";
+import { SearchFilters } from "@/components/search/SearchFilters";
 
 export function SearchResultsPage() {
     const navigate = useNavigate();

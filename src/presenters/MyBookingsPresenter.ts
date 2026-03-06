@@ -5,11 +5,11 @@
  * Transforme Booking[] en BookingSummaryViewModel[].
  */
 
-import { IBookingService } from "@/interfaces/services/IBookingService";
 import { MyBookingsViewModel, BookingSummaryViewModel } from "@/viewmodels/BookingSummaryViewModel";
 import { BookingStatus } from "@/core/enums/BookingStatus";
 import { formatDate, formatNights, formatPrice } from "@/lib/formatters";
 import { countNights } from "@/lib/dateUtils";
+import { IBookingService } from "@/interfaces/services/IHotelService";
 
 const STATUS_MAP: Record<string, { label: string; color: BookingSummaryViewModel["statusColor"] }> = {
     [BookingStatus.CONFIRMED]: { label: "Confirmée", color: "default" },

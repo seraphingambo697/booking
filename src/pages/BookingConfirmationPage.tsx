@@ -8,9 +8,9 @@ import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookingConfirmationCard } from "@/components/booking/BookingConfirmation";
 import { useBookingConfirmation } from "@/hooks/useBookingConfirmation";
 import { ROUTES } from "@/router/routes";
+import { BookingConfirmationCard } from "@/components/booking/BookingConfirmation";
 
 export function BookingConfirmationPage() {
     const { id } = useParams<{ id: string }>();

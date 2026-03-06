@@ -17,7 +17,6 @@
  */
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout } from "@/components/layout/Layout";
 import { HomePage } from "@/pages/HomePage";
 import { SearchResultsPage } from "@/pages/SearchResultsPage";
 import { HotelDetailPage } from "@/pages/HotelDetailPage";
@@ -27,6 +26,7 @@ import { MyBookingsPage } from "@/pages/MyBookingsPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { ROUTES } from "./routes";
+import { Layout } from "@/components/layout/Layout";
 
 export function AppRouter() {
     return (

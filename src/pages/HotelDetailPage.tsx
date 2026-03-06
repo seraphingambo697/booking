@@ -12,14 +12,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HotelGallery } from "@/components/hotel/HotelGallery";
-import { HotelInfo } from "@/components/hotel/HotelInfo";
-import { RoomList } from "@/components/room/RoomList";
 import { useHotelDetail } from "@/hooks/useHotelDetail";
 import { useBookingStore } from "@/store/bookingStore";
 import { useSearchStore } from "@/store/searchStore";
 import { RoomViewModel } from "@/viewmodels/RoomViewModel";
 import { ROUTES } from "@/router/routes";
+import { HotelGallery } from "@/components/hotel/HotelGallery";
+import { HotelInfo } from "@/components/hotel/HotelInfo";
+import { RoomList } from "@/components/room/RoomList";
 
 export function HotelDetailPage() {
     const { id } = useParams<{ id: string }>();

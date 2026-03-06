@@ -1,6 +1,27 @@
-export default {
-    darkMode: ["class"],
-    content: ["./index.html", "./src/**/*.{ts,tsx}"],
+/**
+ * tailwind.config.ts
+ * Configuration de Tailwind CSS.
+ *
+ * Points clés :
+ * - "content" : liste les fichiers à analyser pour purger les classes inutilisées en prod
+ * - "theme.extend.colors" : utilise des variables CSS (--primary, etc.) définies dans index.css
+ *   Cela permet de changer le thème entier depuis un seul endroit
+ * - Le plugin "tailwindcss-animate" est requis par shadcn/ui pour les animations
+ */
+import type { Config } from "tailwindcss";
+import animatePlugin from "tailwindcss-animate";
+
+
+const config: Config = {
+    /* Active le mode sombre via la classe "dark" sur <html> */
+    darkMode: "class",
+
+    /* Fichiers analysés pour supprimer les classes non utilisées en production */
+    content: [
+        "./index.html",
+        "./src/**/*.{ts,tsx}",
+    ],
+
     theme: {
         container: {
             center: true,
@@ -8,6 +29,7 @@ export default {
             screens: { "2xl": "1400px" },
         },
         extend: {
+            /* Couleurs basées sur des variables CSS pour permettre le theming dynamique */
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
@@ -39,12 +61,31 @@ export default {
                     foreground: "hsl(var(--card-foreground))",
                 },
             },
+            /* Rayons de bordure basés sur la variable CSS --radius */
             borderRadius: {
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)",
             },
+            /* Animations utilisées par les composants shadcn/ui */
+            keyframes: {
+                "accordion-down": {
+                    from: { height: "0" },
+                    to: { height: "var(--radix-accordion-content-height)" },
+                },
+                "accordion-up": {
+                    from: { height: "var(--radix-accordion-content-height)" },
+                    to: { height: "0" },
+                },
+            },
+            animation: {
+                "accordion-down": "accordion-down 0.2s ease-out",
+                "accordion-up": "accordion-up 0.2s ease-out",
+            },
         },
     },
-    plugins: [require("tailwindcss-animate")],
+    /* Plugin requis par shadcn/ui pour les transitions et animations */
+    plugins: [animatePlugin],
 };
+
+export default config;

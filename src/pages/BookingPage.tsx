@@ -10,11 +10,11 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { BookingSteps } from "@/components/booking/BookingSteps";
-import { BookingSummary } from "@/components/booking/BookingSummary";
-import { GuestInfoForm } from "@/components/booking/BookingForm";
 import { useBooking } from "@/hooks/useBooking";
 import { ROUTES } from "@/router/routes";
+import { BookingSteps } from "@/components/booking/BookingSteps";
+import { GuestInfoForm } from "@/components/booking/BookingForm";
+import { BookingSummary } from "@/components/booking/BookingSummary";
 
 export function BookingPage() {
     const navigate = useNavigate();
@@ -73,7 +73,7 @@ export function BookingPage() {
                             <div className="flex justify-between pt-2">
                                 <Button variant="outline" onClick={onPrev}>Retour</Button>
                                 <Button
-                                    isLoading={vm.isSubmitting}
+                                    //isLoading={vm.isSubmitting}
                                     onClick={onSubmit}
                                     data-cy="confirm-booking"
                                 >

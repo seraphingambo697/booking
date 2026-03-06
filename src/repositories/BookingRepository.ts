@@ -54,10 +54,14 @@ export class BookingRepository implements IBookingRepository {
         await delay(800); // Simule un appel API de création
 
         const newBooking: Booking = {
-            id: `b${Date.now()}`,             // ID unique basé sur le timestamp
+            id: `b${Date.now()}`, // ID unique basé sur le timestamp
             ...payload,
-            status: BookingStatus.CONFIRMED,  // Confirmée directement en mock
+            status: BookingStatus.CONFIRMED, // Confirmée directement en mock
             createdAt: new Date(),
+            hotelName: "",
+            roomName: "",
+            totalPrice: 0,
+            currency: ""
         };
 
         bookingStore.push(newBooking);
