@@ -11,8 +11,8 @@
  */
 
 import { Booking } from "@/core/entities/Booking";
-import { IBookingService, PriceSummary } from "@/interfaces/services/IBookingService";
 import { IBookingRepository, CreateBookingPayload } from "@/interfaces/repositories/IBookingRepository";
+import { IBookingService, PriceSummary } from "@/interfaces/services/IHotelService";
 import { countNights } from "@/lib/dateUtils";
 
 export class BookingService implements IBookingService {
