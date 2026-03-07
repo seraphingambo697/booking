@@ -1,68 +1,56 @@
 /**
  * src/viewmodels/HotelDetailViewModel.ts
+ * ViewModel pour la page de détail d'un hôtel.
  *
- * ViewModel de la page de détail d'un hôtel.
- *
- * Agrège les données de l'hôtel ET de ses chambres en un seul objet.
- * Le Presenter fait les deux appels (hôtel + chambres) et produit
- * ce ViewModel unique pour la page HotelDetailPage.
- *
- * selectedRoomId est géré ici car c'est un état UI (sélection visuelle)
- * qui ne doit pas polluer l'entité Hotel.
+ * Contient toutes les informations nécessaires à l'affichage complet :
+ * galerie photos, description, équipements, ET la liste des chambres.
  */
-
-/**
- * src/viewmodels/HotelDetailViewModel.ts
- *
- * ViewModel de la page de détail d'un hôtel.
- *
- * Agrège les données de l'hôtel ET de ses chambres en un seul objet.
- * Le Presenter fait les deux appels (hôtel + chambres) et produit
- * ce ViewModel unique pour la page HotelDetailPage.
- *
- * selectedRoomId est géré ici car c'est un état UI (sélection visuelle)
- * qui ne doit pas polluer l'entité Hotel.
- */
-import type { RoomViewModel } from "@/viewmodels/RoomViewModel";
+import { RoomViewModel } from "./RoomViewModel";
 
 export interface HotelDetailViewModel {
+    /** ID de l'hôtel */
     id: string;
+
+    /** Coordonnées GPS pour la map */
+    latitude?: number;
+    longitude?: number;
+
+    /** Nom pour le <h1> de la page */
     name: string;
+
+    /** Description complète (peut contenir plusieurs paragraphes) */
     description: string;
+
+    /** Adresse complète */
     address: string;
     city: string;
     country: string;
 
-    /** Étoiles officielles */
+    /** Étoiles officielles (1-5) */
     stars: number;
 
-    /** Note clients (nombre brut) */
+    /** Note voyageurs (ex: 4.8) */
     rating: number;
 
-    /** Nombre d'avis formaté : "1.3k avis" */
+    /** Avis formaté : "1,3k avis" */
     reviewCount: string;
 
-    /** URLs des photos pour la galerie */
+    /** Toutes les URLs photos pour la galerie */
     images: string[];
 
-    /** Liste des équipements de l'hôtel */
+    /** Équipements de l'hôtel (avec icônes dans le composant) */
     amenities: string[];
 
-    /** Chambres disponibles (transformées en RoomViewModel) */
+    /** Chambres disponibles (chargées en parallèle de l'hôtel) */
     rooms: RoomViewModel[];
 
-    /** true pendant le chargement des données */
+    /** true pendant le chargement initial */
     isLoading: boolean;
 
-    /** true si erreur de chargement */
+    /** true si une erreur s'est produite */
     hasError: boolean;
-
-    /** Message d'erreur à afficher */
     errorMessage?: string;
 
-    /**
-     * ID de la chambre actuellement sélectionnée par l'utilisateur.
-     * Undefined si aucune chambre n'est sélectionnée.
-     */
+    /** ID de la chambre actuellement sélectionnée (surlignée dans la liste) */
     selectedRoomId?: string;
 }

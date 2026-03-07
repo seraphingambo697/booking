@@ -12,7 +12,7 @@
 
 import { Booking } from "@/core/entities/Booking";
 import { IBookingRepository, CreateBookingPayload } from "@/interfaces/repositories/IBookingRepository";
-import { IBookingService, PriceSummary } from "@/interfaces/services/IHotelService";
+import { IBookingService, PriceSummary } from "@/interfaces/services/IBookingService";
 import { countNights } from "@/lib/dateUtils";
 
 export class BookingService implements IBookingService {

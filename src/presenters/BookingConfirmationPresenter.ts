@@ -13,11 +13,11 @@
  */
 
 import { IBookingConfirmationPresenter } from "@/interfaces/presenters/IBookingConfirmationPresenter";
-import { IBookingService } from "@/interfaces/services/IBookingService";
 import { BookingConfirmationViewModel } from "@/viewmodels/BookingConfirmationViewModel";
 import { BookingStatus } from "@/core/enums/BookingStatus";
 import { formatDate, formatNights, formatGuests, formatPrice } from "@/lib/formatters";
 import { countNights } from "@/lib/dateUtils";
+import { IBookingService } from "@/interfaces/services/IBookingService";
 
 /** Mapping statut → label + couleur CSS */
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {

@@ -14,11 +14,11 @@
  */
 
 import { IBookingPresenter } from "@/interfaces/presenters/IBookingPresenter";
-import { IBookingService } from "@/interfaces/services/IBookingService";
 import { BookingViewModel, BookingStepViewModel } from "@/viewmodels/BookingViewModel";
 import { GuestInfo } from "@/core/entities/Booking";
 import { RoomViewModel } from "@/viewmodels/RoomViewModel";
 import { formatPrice, formatDate, formatNights, formatGuests } from "@/lib/formatters";
+import { IBookingService } from "@/interfaces/services/IBookingService";
 
 /** Contexte de réservation stocké en mémoire */
 interface BookingContext {

@@ -24,28 +24,29 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
     const isHero = variant === "hero";
 
     return (
-        <div className={`${isHero ? "bg-white rounded-2xl shadow-2xl p-4 md:p-6" : "bg-white rounded-xl border p-3"}`}>
-            <div className={`grid gap-3 ${isHero ? "grid-cols-1 md:grid-cols-4" : "grid-cols-2 md:grid-cols-4"}`}>
+        <div className={`${isHero ? "bg-white rounded-2xl shadow-2xl p-5 md:p-6" : "bg-white rounded-xl border p-3"}`}>
+            {/* Ligne unique sur desktop : Destination | Arrivée | Départ | Voyageurs | Bouton */}
+            <div className="flex flex-col md:flex-row gap-3 items-stretch">
 
-                {/* ── Champ Destination ── */}
-                <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                {/* ── Champ Destination ── flex-[1.5] pour qu'il soit un peu plus large */}
+                <div className="relative flex-[1.5]">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
                     <input
                         type="text"
                         placeholder="Destination"
                         value={vm.city}
                         onChange={(e) => presenter.onCityChange(e.target.value)}
                         data-cy="search-city"
-                        className={`w-full pl-9 pr-3 border rounded-lg bg-muted/30 focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm ${isHero ? "h-12" : "h-10"
-                            } ${vm.cityError ? "border-destructive" : "border-input"}`}
+                        className={`w-full pl-9 pr-3 border rounded-lg bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/40 text-sm text-gray-800 placeholder:text-gray-400 ${isHero ? "h-12" : "h-10"
+                            } ${vm.cityError ? "border-destructive" : "border-gray-200"}`}
                     />
                     {vm.cityError && (
                         <p className="text-destructive text-xs mt-1">{vm.cityError}</p>
                     )}
                 </div>
 
-                {/* ── Sélecteur de dates ── */}
-                <div className={isHero ? "md:col-span-2" : ""}>
+                {/* ── Sélecteur de dates ── flex-[2] pour les deux champs côte à côte */}
+                <div className="flex-[2]">
                     <DateRangePicker
                         checkIn={vm.checkIn}
                         checkOut={vm.checkOut}
@@ -56,22 +57,24 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                 </div>
 
                 {/* ── Sélecteur de voyageurs ── */}
-                <GuestSelector
-                    count={vm.guestCount}
-                    onChange={(count) => presenter.onGuestCountChange(count)}
-                    height={isHero ? "h-12" : "h-10"}
-                />
+                <div className="flex-1">
+                    <GuestSelector
+                        count={vm.guestCount}
+                        onChange={(count) => presenter.onGuestCountChange(count)}
+                        height={isHero ? "h-12" : "h-10"}
+                    />
+                </div>
 
-                {/* ── Bouton Rechercher (toujours en bas sur mobile, en ligne sur desktop) ── */}
+                {/* ── Bouton Rechercher ── */}
                 <button
                     onClick={onSubmit}
                     disabled={!vm.isValid}
                     data-cy="search-submit"
-                    className={`flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${isHero ? "h-12 md:col-span-4 lg:col-span-1" : "h-10"
+                    className={`flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors px-6 shrink-0 ${isHero ? "h-12" : "h-10"
                         }`}
                 >
                     <Search className="h-4 w-4" />
-                    Rechercher
+                    <span>Rechercher</span>
                 </button>
             </div>
         </div>

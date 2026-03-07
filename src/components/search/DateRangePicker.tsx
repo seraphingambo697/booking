@@ -69,16 +69,16 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
     return (
         <div ref={ref} className="relative">
             {/* Deux boutons : Arrivée / Départ */}
-            <div className="flex">
+            <div className="flex gap-0">
                 <button
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkIn"); }}
                     data-cy="date-checkin"
-                    className={`flex-1 flex items-center gap-2 pl-3 pr-2 border border-r-0 rounded-l-lg bg-muted/30 text-sm text-left focus:outline-none focus:ring-2 focus:ring-primary/40 ${height} ${error ? "border-destructive" : "border-input"
+                    className={`flex-1 flex items-center gap-2 pl-3 pr-2 border border-r-0 rounded-l-lg bg-slate-50 text-sm text-left focus:outline-none focus:ring-2 focus:ring-primary/40 ${height} ${error ? "border-destructive" : "border-gray-200"
                         } ${selecting === "checkIn" && open ? "ring-2 ring-primary/40" : ""}`}
                 >
-                    <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className={checkIn ? "text-foreground" : "text-muted-foreground"}>
+                    <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
+                    <span className={checkIn ? "text-gray-800" : "text-gray-400 text-sm"}>
                         {formatDate(checkIn) ?? "Arrivée"}
                     </span>
                 </button>
@@ -87,11 +87,11 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkOut"); }}
                     data-cy="date-checkout"
-                    className={`flex-1 flex items-center gap-2 pl-3 pr-2 border rounded-r-lg bg-muted/30 text-sm text-left focus:outline-none focus:ring-2 focus:ring-primary/40 ${height} ${error ? "border-destructive" : "border-input"
+                    className={`flex-1 flex items-center gap-2 pl-3 pr-2 border rounded-r-lg bg-slate-50 text-sm text-left focus:outline-none focus:ring-2 focus:ring-primary/40 ${height} ${error ? "border-destructive" : "border-gray-200"
                         } ${selecting === "checkOut" && open ? "ring-2 ring-primary/40" : ""}`}
                 >
-                    <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className={checkOut ? "text-foreground" : "text-muted-foreground"}>
+                    <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
+                    <span className={checkOut ? "text-gray-800" : "text-gray-400 text-sm"}>
                         {formatDate(checkOut) ?? "Départ"}
                     </span>
                 </button>

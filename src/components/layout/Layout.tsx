@@ -15,8 +15,7 @@ export function Layout({ children }: LayoutProps) {
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
-            {/* flex-1 : le contenu occupe tout l'espace entre Header et Footer */}
-            <main className="flex-1">
+            <main className="flex-1 ">
                 {children}
             </main>
             <Footer />

@@ -1,18 +1,21 @@
-import { Booking } from "@/core/entities/Booking";
-import { CreateBookingPayload } from "../repositories/IBookingRepository";
+import { Hotel } from "@/core/entities/Hotel";
+import { SearchParams } from "../repositories/IHotelRepository";
 
-export interface PriceSummary {
-    basePrice: number;
-    nights: number;
-    taxes: number;
-    total: number;
-    currency: string;
+export interface SortOption {
+    field: "price" | "rating" | "stars" | "reviewCount";
+    direction: "asc" | "desc";
 }
 
-export interface IBookingService {
-    create(payload: CreateBookingPayload): Promise<Booking>;
-    getByUserId(userId: string): Promise<Booking[]>;
-    getById(id: string): Promise<Booking | null>;
-    cancel(id: string): Promise<Booking>;
-    calculatePrice(pricePerNight: number, checkIn: Date, checkOut: Date): PriceSummary;
+export interface HotelFilters {
+    minPrice?: number;
+    maxPrice?: number;
+    stars?: number[];
+    amenities?: string[];
+}
+
+export interface IHotelService {
+    search(params: SearchParams): Promise<Hotel[]>;
+    getById(id: string): Promise<Hotel | null>;
+    sortHotels(hotels: Hotel[], sort: SortOption): Hotel[];
+    filterHotels(hotels: Hotel[], filters: HotelFilters): Hotel[];
 }

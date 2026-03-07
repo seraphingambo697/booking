@@ -36,10 +36,10 @@ export function GuestSelector({ count, onChange, height = "h-12" }: GuestSelecto
                 type="button"
                 onClick={() => setOpen(!open)}
                 data-cy="guest-selector"
-                className={`w-full flex items-center gap-2 pl-3 pr-3 border border-input rounded-lg bg-muted/30 text-sm text-left hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/40 ${height}`}
+                className={`w-full flex items-center gap-2 pl-3 pr-3 border border-gray-200 rounded-lg bg-slate-50 text-sm text-left hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/40 ${height}`}
             >
-                <Users className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span>{label}</span>
+                <Users className="h-4 w-4 text-gray-400 shrink-0" />
+                <span className="text-gray-800">{label}</span>
             </button>
 
             {/* Popover */}
