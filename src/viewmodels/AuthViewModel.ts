@@ -31,10 +31,7 @@ export interface AuthViewModel {
     /** Email de l'utilisateur connecté */
     userEmail?: string;
 
-    /**
-     * Initiales pour l'avatar : "MD" (undefined si non connecté).
-     * Calculé par getInitials(firstName, lastName) dans le Presenter.
-     */
+
     userInitials?: string;
 
     /** URL de la photo de profil (optionnel) */
