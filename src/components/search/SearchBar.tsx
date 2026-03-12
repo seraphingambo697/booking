@@ -28,10 +28,8 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
             ? "bg-white rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-4 border border-gray-100"
             : "bg-white rounded-xl border border-gray-200 p-2"
             }`}>
-            {/* Conteneur Flex - On s'assure que les items sont bien alignés */}
             <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
 
-                {/* ── Champ Destination ── */}
                 <div className="relative flex-[1.5]">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
                     <input
@@ -55,7 +53,6 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                     />
                 </div>
 
-                {/* ── Sélecteur de voyageurs ── */}
                 <div className="flex-1 bg-gray-50 rounded-2xl">
                     <GuestSelector
                         count={vm.guestCount}
@@ -64,7 +61,6 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                     />
                 </div>
 
-                {/* ── Bouton Rechercher (FORCE NOIR) ── */}
                 <button
                     onClick={(e) => {
                         e.preventDefault();

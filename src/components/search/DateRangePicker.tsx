@@ -69,7 +69,6 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
     return (
         <div ref={ref} className="relative w-full">
             <div className="flex gap-1 bg-gray-100 p-1 rounded-2xl">
-                {/* Bouton Arrivée */}
                 <button
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkIn"); }}
@@ -90,7 +89,6 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
                 {/* Séparateur visuel */}
                 <div className="w-[1px] h-8 bg-gray-300 self-center" />
 
-                {/* Bouton Départ */}
                 <button
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkOut"); }}
@@ -109,7 +107,6 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
                 </button>
             </div>
 
-            {/* Calendrier Popover Modernisé */}
             {open && (
                 <div className="absolute top-[calc(100%+10px)] left-0 z-[100] bg-white border-2 border-gray-100 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 w-[340px] animate-in fade-in zoom-in duration-200">
                     <div className="flex justify-between items-center mb-6">

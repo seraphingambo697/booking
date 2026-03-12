@@ -3,7 +3,7 @@
  * Sélecteur de nombre de voyageurs avec boutons +/−.
  *
  * Ouvre un petit popover au clic.
- * Min : 1 voyageur / Max : 10 voyageurs.
+ * Min : 1 personne / Max : 10 personnes.
  */
 import { useState, useRef, useEffect } from "react";
 import { Users, Minus, Plus } from "lucide-react";
@@ -30,7 +30,6 @@ export function GuestSelector({ count, onChange, height = "h-14" }: GuestSelecto
 
     return (
         <div ref={ref} className="relative w-full">
-            {/* Bouton d'ouverture : Fond gris clair, texte Noir Gras */}
             <button
                 type="button"
                 onClick={() => setOpen(!open)}
@@ -46,7 +45,6 @@ export function GuestSelector({ count, onChange, height = "h-14" }: GuestSelecto
                 </div>
             </button>
 
-            {/* Popover Modernisé */}
             {open && (
                 <div className="absolute top-[calc(100%+10px)] left-0 md:right-0 z-[100] bg-white border-2 border-gray-100 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 w-64 animate-in fade-in zoom-in duration-200">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
@@ -54,7 +52,6 @@ export function GuestSelector({ count, onChange, height = "h-14" }: GuestSelecto
                     </p>
 
                     <div className="flex items-center justify-between bg-gray-50 p-4 rounded-2xl">
-                        {/* Bouton − : Noir au survol */}
                         <button
                             type="button"
                             onClick={() => onChange(Math.max(1, count - 1))}
@@ -64,7 +61,6 @@ export function GuestSelector({ count, onChange, height = "h-14" }: GuestSelecto
                             <Minus className="h-4 w-4 stroke-[3px]" />
                         </button>
 
-                        {/* Compteur central */}
                         <div className="text-center">
                             <span className="text-2xl font-black text-black leading-none">{count}</span>
                         </div>
@@ -80,7 +76,6 @@ export function GuestSelector({ count, onChange, height = "h-14" }: GuestSelecto
                         </button>
                     </div>
 
-                    {/* Bouton Valider : Noir Pur */}
                     <button
                         onClick={() => setOpen(false)}
                         className="mt-4 w-full py-3 bg-black text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-gray-800 transition-colors shadow-lg shadow-black/10"
