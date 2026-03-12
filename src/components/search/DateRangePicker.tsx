@@ -67,55 +67,65 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
         (checkOut && day.toDateString() === checkOut.toDateString());
 
     return (
-        <div ref={ref} className="relative">
-            {/* Deux boutons : Arrivée / Départ */}
-            <div className="flex gap-0">
+        <div ref={ref} className="relative w-full">
+            <div className="flex gap-1 bg-gray-100 p-1 rounded-2xl">
+                {/* Bouton Arrivée */}
                 <button
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkIn"); }}
-                    data-cy="date-checkin"
-                    className={`flex-1 flex items-center gap-2 pl-3 pr-2 border border-r-0 rounded-l-lg bg-slate-50 text-sm text-left focus:outline-none focus:ring-2 focus:ring-primary/40 ${height} ${error ? "border-destructive" : "border-gray-200"
-                        } ${selecting === "checkIn" && open ? "ring-2 ring-primary/40" : ""}`}
+                    className={`flex-1 flex items-center gap-3 px-4 rounded-xl text-left transition-all ${height} ${selecting === "checkIn" && open
+                        ? "bg-white shadow-sm ring-2 ring-black"
+                        : "bg-transparent hover:bg-gray-200"
+                        } ${error ? "border-2 border-red-500" : ""}`}
                 >
-                    <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
-                    <span className={checkIn ? "text-gray-800" : "text-gray-400 text-sm"}>
-                        {formatDate(checkIn) ?? "Arrivée"}
-                    </span>
+                    <Calendar className="h-5 w-5 text-gray-500" />
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Arrivée</span>
+                        <span className={`text-sm font-bold ${checkIn ? "text-black" : "text-gray-400"}`}>
+                            {formatDate(checkIn) ?? "Ajouter"}
+                        </span>
+                    </div>
                 </button>
 
+                {/* Séparateur visuel */}
+                <div className="w-[1px] h-8 bg-gray-300 self-center" />
+
+                {/* Bouton Départ */}
                 <button
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkOut"); }}
-                    data-cy="date-checkout"
-                    className={`flex-1 flex items-center gap-2 pl-3 pr-2 border rounded-r-lg bg-slate-50 text-sm text-left focus:outline-none focus:ring-2 focus:ring-primary/40 ${height} ${error ? "border-destructive" : "border-gray-200"
-                        } ${selecting === "checkOut" && open ? "ring-2 ring-primary/40" : ""}`}
+                    className={`flex-1 flex items-center gap-3 px-4 rounded-xl text-left transition-all ${height} ${selecting === "checkOut" && open
+                        ? "bg-white shadow-sm ring-2 ring-black"
+                        : "bg-transparent hover:bg-gray-200"
+                        } ${error ? "border-2 border-red-500" : ""}`}
                 >
-                    <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
-                    <span className={checkOut ? "text-gray-800" : "text-gray-400 text-sm"}>
-                        {formatDate(checkOut) ?? "Départ"}
-                    </span>
+                    <Calendar className="h-5 w-5 text-gray-500" />
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Départ</span>
+                        <span className={`text-sm font-bold ${checkOut ? "text-black" : "text-gray-400"}`}>
+                            {formatDate(checkOut) ?? "Ajouter"}
+                        </span>
+                    </div>
                 </button>
             </div>
 
-            {error && <p className="text-destructive text-xs mt-1">{error}</p>}
-
-            {/* Calendrier popover */}
+            {/* Calendrier Popover Modernisé */}
             {open && (
-                <div className="absolute top-full left-0 mt-2 z-50 bg-white border rounded-xl shadow-xl p-4 w-80">
-                    <p className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
-                        {selecting === "checkIn" ? "Sélectionnez votre arrivée" : "Sélectionnez votre départ"}
-                    </p>
+                <div className="absolute top-[calc(100%+10px)] left-0 z-[100] bg-white border-2 border-gray-100 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 w-[340px] animate-in fade-in zoom-in duration-200">
+                    <div className="flex justify-between items-center mb-6">
+                        <p className="text-sm font-black uppercase tracking-widest text-black">
+                            {selecting === "checkIn" ? "Date d'arrivée" : "Date de départ"}
+                        </p>
+                    </div>
 
-                    {/* En-têtes des jours */}
-                    <div className="grid grid-cols-7 gap-1 mb-1">
-                        {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => (
-                            <div key={d} className="text-center text-xs text-muted-foreground font-medium py-1">
+                    <div className="grid grid-cols-7 gap-1 mb-2">
+                        {["LU", "MA", "ME", "JE", "VE", "SA", "DI"].map((d) => (
+                            <div key={d} className="text-center text-[10px] font-black text-gray-400 py-2">
                                 {d}
                             </div>
                         ))}
                     </div>
 
-                    {/* Grille des jours */}
                     <div className="grid grid-cols-7 gap-1">
                         {days.map((day, i) => {
                             const disabled = isDayDisabled(day);
@@ -128,13 +138,13 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
                                     type="button"
                                     disabled={disabled}
                                     onClick={() => handleDayClick(day)}
-                                    className={`text-xs h-8 w-8 rounded-md flex items-center justify-center transition-colors ${disabled
-                                        ? "text-muted-foreground/40 cursor-not-allowed"
+                                    className={`text-xs h-10 w-10 rounded-xl flex items-center justify-center transition-all ${disabled
+                                        ? "text-gray-200 cursor-not-allowed"
                                         : selected
-                                            ? "bg-primary text-primary-foreground font-bold"
+                                            ? "bg-black text-white font-black scale-110 shadow-lg"
                                             : inRange
-                                                ? "bg-primary/10 text-primary"
-                                                : "hover:bg-muted"
+                                                ? "bg-gray-100 text-black font-bold"
+                                                : "hover:bg-gray-100 text-gray-800 font-medium"
                                         }`}
                                 >
                                     {format(day, "d")}
