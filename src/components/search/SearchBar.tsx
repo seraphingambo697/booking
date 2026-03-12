@@ -79,7 +79,6 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                 </button>
             </div>
 
-            {/* Erreurs alignées à gauche sous la barre */}
             {(vm.cityError || vm.dateError) && (
                 <div className="mt-3 px-4 flex gap-6">
                     {vm.cityError && <span className="text-red-600 text-[10px] font-black uppercase tracking-tighter">{vm.cityError}</span>}

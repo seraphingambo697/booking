@@ -14,11 +14,10 @@ interface GuestSelectorProps {
     height?: string;
 }
 
-export function GuestSelector({ count, onChange, height = "h-12" }: GuestSelectorProps) {
+export function GuestSelector({ count, onChange, height = "h-14" }: GuestSelectorProps) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
-    /* Ferme le popover au clic extérieur */
     useEffect(() => {
         const handler = (e: MouseEvent) => {
             if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -27,46 +26,47 @@ export function GuestSelector({ count, onChange, height = "h-12" }: GuestSelecto
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
-    const label = count === 1 ? "1 voyageur" : `${count} voyageurs`;
+    const label = count === 1 ? "1 personne" : `${count} personnes`;
 
     return (
-        <div ref={ref} className="relative">
-            {/* Bouton d'ouverture */}
+        <div ref={ref} className="relative w-full">
+            {/* Bouton d'ouverture : Fond gris clair, texte Noir Gras */}
             <button
                 type="button"
                 onClick={() => setOpen(!open)}
-                data-cy="guest-selector"
-                className={`w-full flex items-center gap-2 pl-3 pr-3 border border-gray-200 rounded-lg bg-slate-50 text-sm text-left hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/40 ${height}`}
+                className={`w-full flex items-center gap-3 px-4 rounded-2xl transition-all border-2 ${open
+                    ? "bg-white border-black shadow-sm"
+                    : "bg-gray-100 border-transparent hover:bg-gray-200"
+                    } ${height}`}
             >
-                <Users className="h-4 w-4 text-gray-400 shrink-0" />
-                <span className="text-gray-800">{label}</span>
+                <Users className="h-5 w-5 text-gray-500 shrink-0" />
+                <div className="flex flex-col text-left">
+                    <span className="text-[10px] uppercase font-black text-gray-400 leading-none mb-1">Voyageurs</span>
+                    <span className="text-sm font-bold text-black">{label}</span>
+                </div>
             </button>
 
-            {/* Popover */}
+            {/* Popover Modernisé */}
             {open && (
-                <div className="absolute top-full left-0 mt-2 z-50 bg-white border rounded-xl shadow-xl p-4 w-56">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                        Voyageurs
+                <div className="absolute top-[calc(100%+10px)] left-0 md:right-0 z-[100] bg-white border-2 border-gray-100 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] p-6 w-64 animate-in fade-in zoom-in duration-200">
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
+                        Nombre de personnes
                     </p>
 
-                    <div className="flex items-center justify-between">
-                        {/* Bouton − */}
+                    <div className="flex items-center justify-between bg-gray-50 p-4 rounded-2xl">
+                        {/* Bouton − : Noir au survol */}
                         <button
                             type="button"
                             onClick={() => onChange(Math.max(1, count - 1))}
                             disabled={count <= 1}
-                            data-cy="guest-decrease"
-                            className="h-8 w-8 border rounded-md flex items-center justify-center hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                            className="h-10 w-10 border-2 border-gray-200 rounded-xl flex items-center justify-center hover:border-black hover:bg-black hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-all"
                         >
-                            <Minus className="h-4 w-4" />
+                            <Minus className="h-4 w-4 stroke-[3px]" />
                         </button>
 
-                        {/* Compteur */}
+                        {/* Compteur central */}
                         <div className="text-center">
-                            <span className="text-2xl font-bold">{count}</span>
-                            <p className="text-xs text-muted-foreground">
-                                {count === 1 ? "voyageur" : "voyageurs"}
-                            </p>
+                            <span className="text-2xl font-black text-black leading-none">{count}</span>
                         </div>
 
                         {/* Bouton + */}
@@ -74,17 +74,16 @@ export function GuestSelector({ count, onChange, height = "h-12" }: GuestSelecto
                             type="button"
                             onClick={() => onChange(Math.min(10, count + 1))}
                             disabled={count >= 10}
-                            data-cy="guest-increase"
-                            className="h-8 w-8 border rounded-md flex items-center justify-center hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                            className="h-10 w-10 border-2 border-gray-200 rounded-xl flex items-center justify-center hover:border-black hover:bg-black hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-all"
                         >
-                            <Plus className="h-4 w-4" />
+                            <Plus className="h-4 w-4 stroke-[3px]" />
                         </button>
                     </div>
 
-                    {/* Fermer */}
+                    {/* Bouton Valider : Noir Pur */}
                     <button
                         onClick={() => setOpen(false)}
-                        className="mt-4 w-full text-sm text-primary hover:underline text-center"
+                        className="mt-4 w-full py-3 bg-black text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-gray-800 transition-colors shadow-lg shadow-black/10"
                     >
                         Valider
                     </button>
