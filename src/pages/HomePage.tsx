@@ -73,7 +73,7 @@ export function HomePage() {
             <section
                 className="relative text-white py-24 px-4"
                 style={{
-                    backgroundImage: "linear-gradient(rgba(15,23,42,0.72), rgba(15,23,42,0.72)), url(https://images.unsplash.com/photo-1551882547-ff40c4fe799f?w=1600)",
+                    backgroundImage: "url(https://cdn.pixabay.com/photo/2022/04/26/13/14/background-7158357_960_720.jpg)",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}

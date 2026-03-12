@@ -25,10 +25,8 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
 
     return (
         <div className={`${isHero ? "bg-white rounded-2xl shadow-2xl p-5 md:p-6" : "bg-white rounded-xl border p-3"}`}>
-            {/* Ligne unique sur desktop : Destination | Arrivée | Départ | Voyageurs | Bouton */}
             <div className="flex flex-col md:flex-row gap-3 items-stretch">
 
-                {/* ── Champ Destination ── flex-[1.5] pour qu'il soit un peu plus large */}
                 <div className="relative flex-[1.5]">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
                     <input
