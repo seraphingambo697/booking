@@ -1,7 +1,7 @@
 /**
  * src/pages/BookingPage.tsx
  *
- * Tunnel de réservation multi-étapes.
+ * Tunnel de réservation multi-étapes patrick.
  * Étape 1 : formulaire voyageur → Étape 2 : récapitulatif → Confirmation
  */
 
