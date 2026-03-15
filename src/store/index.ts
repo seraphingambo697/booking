@@ -1,7 +1,7 @@
+import { SearchParams } from "@/interfaces/repositories/IHotelRepository";
 import { create } from "zustand";
-import { SearchParams } from "@/interfaces";
+//import { SearchParams } from "@/interfaces";
 
-// ─── Search Store ─────────────────────────────────────────────────────────────
 
 interface SearchStore {
   params: Partial<SearchParams>;
@@ -15,7 +15,6 @@ export const useSearchStore = create<SearchStore>((set) => ({
   reset: () => set({ params: { city: "", guestCount: 2 } }),
 }));
 
-// ─── Booking Store ────────────────────────────────────────────────────────────
 
 interface BookingStore {
   hotelId: string | null;
@@ -49,7 +48,6 @@ export const useBookingStore = create<BookingStore>((set) => ({
   reset: () => set({ hotelId: null, roomId: null, hotelName: null, room: null, checkIn: null, checkOut: null, guestCount: 2 }),
 }));
 
-// ─── Auth Store ───────────────────────────────────────────────────────────────
 
 interface AuthStore {
   userId: string | null;

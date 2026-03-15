@@ -1,16 +1,20 @@
 import { Hotel } from "@/core/entities/Hotel";
 import { Room } from "@/core/entities/Room";
 import { Booking } from "@/core/entities/Booking";
-import { BookingStatus } from "@/core/enums";
-import {
+//import { BookingStatus } from "@/core/enums";
+/*import {
   IHotelRepository,
   IRoomRepository,
   IBookingRepository,
   SearchParams,
   CreateBookingPayload,
-} from "@/interfaces";
+} from "@/interfaces";*/
 import { MOCK_HOTELS, MOCK_ROOMS, MOCK_BOOKINGS } from "@/api/mockData";
-import { generateBookingRef } from "@/lib/utils";
+import { IHotelRepository, SearchParams } from "@/interfaces/repositories/IHotelRepository";
+import { IRoomRepository } from "@/interfaces/repositories/IRoomRepository";
+import { CreateBookingPayload, IBookingRepository } from "@/interfaces/repositories/IBookingRepository";
+import { BookingStatus } from "@/core/enums/BookingStatus";
+//import { generateBookingRef } from "@/lib/utils";
 
 // ─── Hotel Repository ─────────────────────────────────────────────────────────
 

@@ -12,7 +12,7 @@
  * - useState recréerait le Presenter à chaque render
  * - useRef conserve la même instance pendant toute la vie du composant
  */
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { SearchPresenter } from "@/presenters/SearchPresenter";
 import { SearchViewModel } from "@/viewmodels/SearchViewModel";
 

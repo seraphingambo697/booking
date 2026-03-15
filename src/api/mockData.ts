@@ -1,7 +1,8 @@
 import { Hotel } from "@/core/entities/Hotel";
 import { Room } from "@/core/entities/Room";
 import { Booking } from "@/core/entities/Booking";
-import { BookingStatus, RoomType } from "@/core/enums";
+import { RoomType } from "@/core/enums/RoomType";
+import { BookingStatus } from "@/core/enums/BookingStatus";
 
 export const MOCK_HOTELS: Hotel[] = [
   {

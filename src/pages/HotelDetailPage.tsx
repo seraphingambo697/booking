@@ -12,7 +12,7 @@ import { useHotelDetail } from "@/hooks/useHotelDetail";
 import { useBookingStore } from "@/store/bookingStore";
 import { useSearchStore } from "@/store/searchStore";
 import { RoomViewModel } from "@/viewmodels/RoomViewModel";
-import { HotelDetailViewModel } from "@/viewmodels/HotelDetailViewModel";
+//import { HotelDetailViewModel } from "@/viewmodels/HotelDetailViewModel";
 import { ROUTES } from "@/router/routes";
 
 /* ── Icônes équipements ── */

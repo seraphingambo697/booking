@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Hotel, LogIn, LogOut, BookOpen, Menu, X, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+//import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/router/routes";
 import { useAuthStore } from "@/store/authStore";

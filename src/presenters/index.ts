@@ -1,17 +1,30 @@
-import { IHotelService, IBookingService, IAuthService, SearchParams, SortOption, HotelFilters, LoginCredentials, RegisterPayload, CreateBookingPayload } from "@/interfaces";
-import {
+//import { IHotelService, IBookingService, IAuthService, SearchParams, SortOption, HotelFilters, LoginCredentials, RegisterPayload, CreateBookingPayload } from "@/interfaces";
+/*import {
   HotelListViewModel, HotelCardViewModel, HotelDetailViewModel,
   RoomViewModel, SearchViewModel, BookingViewModel, BookingStepViewModel,
   BookingConfirmationViewModel, MyBookingsViewModel, BookingSummaryViewModel, AuthViewModel,
-} from "@/viewmodels";
-import { IRoomRepository } from "@/interfaces";
-import { BookingStatus } from "@/core/enums";
+} from "@/viewmodels";*/
+//import { IRoomRepository } from "@/interfaces";
+//import { BookingStatus } from "@/core/enums";
+import { BookingStatus } from "@/core/enums/BookingStatus";
+import { SearchParams } from "@/interfaces/repositories/IHotelRepository";
+import { IRoomRepository } from "@/interfaces/repositories/IRoomRepository";
+import { IAuthService, LoginCredentials, RegisterPayload } from "@/interfaces/services/IAuthService";
+import { IBookingService } from "@/interfaces/services/IBookingService";
+import { HotelFilters, IHotelService, SortOption } from "@/interfaces/services/IHotelService";
 import {
   formatPrice, formatDate, formatNights, formatGuests,
   formatReviewCount, countNights, getInitials,
 } from "@/lib/utils";
+import { AuthViewModel } from "@/viewmodels/AuthViewModel";
+import { BookingConfirmationViewModel } from "@/viewmodels/BookingConfirmationViewModel";
+import { BookingSummaryViewModel, MyBookingsViewModel } from "@/viewmodels/BookingSummaryViewModel";
+import { BookingViewModel } from "@/viewmodels/BookingViewModel";
+import { HotelDetailViewModel } from "@/viewmodels/HotelDetailViewModel";
+import { HotelCardViewModel, HotelListViewModel } from "@/viewmodels/HotelListViewModel";
+import { RoomViewModel } from "@/viewmodels/RoomViewModel";
+import { SearchViewModel } from "@/viewmodels/SearchViewModel";
 
-// ─── Search Presenter ─────────────────────────────────────────────────────────
 
 export class SearchPresenter {
   private vm: SearchViewModel = {
@@ -22,7 +35,7 @@ export class SearchPresenter {
     isValid: false,
   };
 
-  constructor(private onChange: (vm: SearchViewModel) => void) {}
+  constructor(private onChange: (vm: SearchViewModel) => void) { }
 
   onCityChange(city: string) {
     this.update({ city, cityError: city ? undefined : "Veuillez entrer une ville" });
@@ -52,7 +65,6 @@ export class SearchPresenter {
   getViewModel() { return this.vm; }
 }
 
-// ─── Hotel List Presenter ─────────────────────────────────────────────────────
 
 export class HotelListPresenter {
   private vm: HotelListViewModel = {
@@ -65,7 +77,7 @@ export class HotelListPresenter {
     activeFilters: {},
   };
 
-  constructor(private hotelService: IHotelService, private onChange: (vm: HotelListViewModel) => void) {}
+  constructor(private hotelService: IHotelService, private onChange: (vm: HotelListViewModel) => void) { }
 
   async loadHotels(params: SearchParams) {
     this.update({ isLoading: true, hasError: false });
@@ -129,7 +141,7 @@ export class HotelDetailPresenter {
     private hotelService: IHotelService,
     private roomRepo: IRoomRepository,
     private onChange: (vm: HotelDetailViewModel) => void
-  ) {}
+  ) { }
 
   async loadHotel(id: string) {
     this.update({ isLoading: true, hasError: false });
@@ -213,7 +225,7 @@ export class BookingPresenter {
     private bookingService: IBookingService,
     private onChange: (vm: BookingViewModel) => void,
     private onSuccess: (bookingId: string) => void
-  ) {}
+  ) { }
 
   init(hotelName: string, room: any, checkIn: Date, checkOut: Date, guestCount: number) {
     const price = this.bookingService.calculatePrice(room.priceRaw, checkIn, checkOut);
@@ -306,7 +318,7 @@ export class BookingConfirmationPresenter {
   constructor(
     private bookingService: IBookingService,
     private onChange: (vm: BookingConfirmationViewModel) => void
-  ) {}
+  ) { }
 
   async loadConfirmation(bookingId: string) {
     this.update({ isLoading: true });
@@ -363,7 +375,7 @@ export class MyBookingsPresenter {
     bookings: [], isLoading: false, hasError: false, isEmpty: false,
   };
 
-  constructor(private bookingService: IBookingService, private onChange: (vm: MyBookingsViewModel) => void) {}
+  constructor(private bookingService: IBookingService, private onChange: (vm: MyBookingsViewModel) => void) { }
 
   async loadBookings(userId: string) {
     this.update({ isLoading: true });
@@ -412,7 +424,7 @@ export class MyBookingsPresenter {
 export class AuthPresenter {
   private vm: AuthViewModel = { isAuthenticated: false, isLoading: false, hasError: false };
 
-  constructor(private authService: IAuthService, private onChange: (vm: AuthViewModel) => void) {}
+  constructor(private authService: IAuthService, private onChange: (vm: AuthViewModel) => void) { }
 
   init() {
     const user = this.authService.getCurrentUser();

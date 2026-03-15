@@ -3,7 +3,7 @@
  * Page "Mes réservations" — redesignée, pleine largeur, moderne.
  */
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Calendar, Moon, Hotel, ArrowRight, Tag } from "lucide-react";
+import { BookOpen, Calendar, Moon, Hotel, ArrowRight} from "lucide-react";
 import { useState, useEffect } from "react";
 import { MyBookingsViewModel, BookingSummaryViewModel } from "@/viewmodels/BookingSummaryViewModel";
 import { BookingRepository } from "@/repositories/BookingRepository";

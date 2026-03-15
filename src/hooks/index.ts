@@ -6,13 +6,22 @@ import {
   SearchPresenter, HotelListPresenter, HotelDetailPresenter,
   BookingPresenter, BookingConfirmationPresenter, MyBookingsPresenter, AuthPresenter,
 } from "@/presenters";
-import {
+/*import {
   SearchViewModel, HotelListViewModel, HotelDetailViewModel,
   BookingViewModel, BookingConfirmationViewModel, MyBookingsViewModel, AuthViewModel,
-} from "@/viewmodels";
-import { SearchParams, SortOption, HotelFilters } from "@/interfaces";
+} from "@/viewmodels";*/
+//import { SearchParams, SortOption, HotelFilters } from "@/interfaces";
 import { useAuthStore, useBookingStore } from "@/store";
 import { ROUTES } from "@/router/routes";
+import { SearchViewModel } from "@/viewmodels/SearchViewModel";
+import { SearchParams } from "@/interfaces/repositories/IHotelRepository";
+import { HotelListViewModel } from "@/viewmodels/HotelListViewModel";
+import { HotelFilters, SortOption } from "@/interfaces/services/IHotelService";
+import { HotelDetailViewModel } from "@/viewmodels/HotelDetailViewModel";
+import { BookingViewModel } from "@/viewmodels/BookingViewModel";
+import { BookingConfirmationViewModel } from "@/viewmodels/BookingConfirmationViewModel";
+import { MyBookingsViewModel } from "@/viewmodels/BookingSummaryViewModel";
+import { AuthViewModel } from "@/viewmodels/AuthViewModel";
 
 // ─── Singletons ───────────────────────────────────────────────────────────────
 const hotelRepo = new HotelRepository();
