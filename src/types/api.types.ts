@@ -1,31 +1,13 @@
-/**
- * src/types/api.types.ts
- *
- * Types relatifs aux échanges avec l'API REST.
- *
- * Ces types représentent la forme exacte des données JSON
- * renvoyées par l'API (avant transformation en entités).
- *
 
- * Les repositories se chargent de la transformation (ApiBooking → Booking)
+/**
+ * Types TypeScript correspondant exactement aux réponses JSON du backend .
+ *
+ * Convention backend : snake_case dans le JSON.
+ * Convention frontend : camelCase dans les entités (conversion dans les repositories).
  */
 
-/** Réponse paginée générique de l'API */
-export interface ApiPaginatedResponse<T> {
-    data: T[];
-    total: number;
-    page: number;
-    limit: number;
-}
+// ── Hôtel ─────────────────────────────────────────────────────────────────────
 
-/** Réponse d'erreur standard de l'API */
-export interface ApiErrorResponse {
-    message: string;
-    statusCode: number;
-    errors?: Record<string, string[]>;
-}
-
-/** Hôtel tel que retourné par l'API (dates en string) */
 export interface ApiHotel {
     id: string;
     name: string;
@@ -36,45 +18,134 @@ export interface ApiHotel {
     latitude: number;
     longitude: number;
     stars: number;
-    rating: number;
-    review_count: number;
-    images: string[];
+    status: string;
     amenities: string[];
-    price_from: number;
-    currency: string;
+    images: string[];
+    phone?: string;
+    email?: string;
+    website?: string;
+    owner_id: string;
+    created_at: string;
+    updated_at: string;
 }
 
-/** Réservation telle que retournée par l'API */
+// ── Chambre ───────────────────────────────────────────────────────────────────
+
+export interface ApiRoom {
+    id: string;
+    hotel_id: string;
+    name: string;
+    type: string;
+    description: string;
+    price_per_night: number;
+    currency: string;
+    capacity: number;
+    size_sqm: number;
+    bed_count: number;
+    bed_type: string;
+    floor: number;
+    amenities: string[];
+    images: string[];
+    is_available: boolean;
+}
+
+/** Chambre enrichie retournée par POST /bookings/availability/ */
+export interface ApiAvailableRoom {
+    room: ApiRoom;
+    nights: number;
+    total_price: number;
+    currency: string;
+    is_free_cancel: boolean;
+}
+
+// ── Recherche ─────────────────────────────────────────────────────────────────
+
+/** Résultat de POST /search/ */
+export interface ApiSearchResult {
+    hotel: ApiHotel;
+    available_rooms: ApiRoom[];
+    min_price: number;
+    nights: number;
+}
+
+// ── Réservation ───────────────────────────────────────────────────────────────
+
 export interface ApiBooking {
     id: string;
     user_id: string;
     hotel_id: string;
     room_id: string;
-    hotel_name: string;
-    room_name: string;
-    check_in: string;
+    // Dates (propriétés calculées depuis DateRange)
+    check_in: string;             // "YYYY-MM-DD"
     check_out: string;
+    nights: number;
+    // Voyageurs (depuis GuestCount)
     guest_count: number;
-    status: string;
+    adults: number;
+    children: number;
+    // Prix (depuis Money)
     total_price: number;
     currency: string;
-    guest_info: {
-        first_name: string;
-        last_name: string;
-        email: string;
-        phone: string;
-    };
+    // Statut
+    status: string;               // "PENDING"|"CONFIRMED"|"CANCELLED"|"COMPLETED"
+    status_label: string;         // "En attente"|"Confirmée"…
+    is_cancellable: boolean;
+    is_free_cancel: boolean;
+    // Optionnels
+    special_requests: string;
+    cancelled_at: string | null;
+    cancellation_reason: string;
+    created_at: string;
+    updated_at: string;
+}
+
+/** Résultat de DELETE /bookings/{id}/ */
+export interface ApiCancelResult {
+    booking: ApiBooking;
+    is_free: boolean;
+    refund_amount: number;
+    refund_currency: string;
+}
+
+// ── Paiement ──────────────────────────────────────────────────────────────────
+
+export interface ApiPayment {
+    id: string;
+    booking_id: string;
+    user_id: string;
+    amount: number;
+    currency: string;
+    status: string;               // "PENDING"|"SUCCEEDED"|"FAILED"|"REFUNDED"
+    method: string;               // "CARD"|"PAYPAL"|"BANK_TRANSFER"
+    gateway_ref: string;
+    failure_reason: string;
+    refunded_at: string | null;
     created_at: string;
 }
 
-/** Token d'authentification*/
-export interface ApiAuthResponse {
-    access_token: string;
-    token_type: "Bearer";
-    user: {
-        id: string;
-        first_name: string;
-        last_name: string;
-        email: string;
-    };
+// ── Utilisateur ───────────────────────────────────────────────────────────────
+
+export interface ApiUser {
+    id: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    phone: string;
+    is_active: boolean;
+    is_admin: boolean;
+    created_at: string;
+}
+
+// ── Avis ──────────────────────────────────────────────────────────────────────
+
+export interface ApiReview {
+    id: string;
+    user_id: string;
+    hotel_id: string;
+    booking_id: string;
+    rating: number;
+    title: string;
+    comment: string;
+    is_visible: boolean;
+    created_at: string;
 }

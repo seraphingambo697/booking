@@ -1,109 +1,98 @@
 /**
  * src/services/AuthService.ts
+ * Service d'authentification connecté au backend Django.
  *
- * Implémentation concrète de IAuthService.
+ * Flux login :
+ *   1. POST /auth/login/   → { tokens: {access, refresh}, user: {...} }
+ *   2. Stockage tokens dans localStorage (lu par apiClient.ts)
+ *   3. Mise à jour du store Zustand via authStore.setAuth()
  *
- * Gère :
- * - L'authentification (login/register)
- * - La persistance du token JWT dans localStorage
- * - La récupération de l'utilisateur courant
- *
- * En mock : compare avec des identifiants hardcodés
- * En production : utiliserait authApi.ts
- *
- * Compte de démonstration : demo@luxstay.fr / demo123
+ * Flux register :
+ *   1. POST /auth/register/  → crée le compte, retourne le profil
+ *   2. POST /auth/login/     → récupère les tokens
  */
-
-import { User } from "@/core/entities/User";
 import { IAuthService, LoginCredentials, RegisterPayload, AuthResult } from "@/interfaces/services/IAuthService";
+import { User } from "@/core/entities/User";
+import { authApi } from "@/api/authApi";
+import { useAuthStore } from "@/store/authStore";
+import { ApiUser } from "@/types/api.types";
 
-/** Clés localStorage */
-const TOKEN_KEY = "auth_token";
-const USER_KEY = "auth_user";
-
-/** Utilisateur de démonstration */
-const DEMO_USER: User = {
-    id: "u1",
-    firstName: "Marie",
-    lastName: "Dupont",
-    email: "demo@luxstay.fr",
-    phone: "+33 6 12 34 56 78",
-    createdAt: new Date("2024-01-01"),
-};
-
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+function toUser(api: ApiUser): User {
+    return {
+        id: api.id,
+        firstName: api.first_name,
+        lastName: api.last_name,
+        email: api.email,
+        phone: api.phone ?? "",
+        createdAt: new Date(api.created_at),
+    };
+}
 
 export class AuthService implements IAuthService {
-    /** Cache en mémoire de l'utilisateur courant */
-    private currentUser: User | null = null;
 
     async login(credentials: LoginCredentials): Promise<AuthResult> {
-        await delay(600);
+        const response = await authApi.login({
+            email: credentials.email,
+            password: credentials.password,
+        });
 
-        // Validation mock — en production : appel à authApi.loginUser()
-        if (credentials.email !== "demo@luxstay.fr" || credentials.password !== "demo123") {
-            throw new Error("Email ou mot de passe incorrect");
-        }
+        const user = toUser(response.user);
 
-        // Génère un token mock (en production : reçu depuis l'API)
-        const token = `mock-jwt-${Date.now()}`;
+        // Mise à jour du store Zustand (gère aussi localStorage)
+        useAuthStore.getState().setAuth(
+            {
+                id: user.id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                isAdmin: response.user.is_admin,
+            },
+            response.tokens.access,
+            response.tokens.refresh,
+        );
 
-        // Persiste dans localStorage pour survivre au refresh de page
-        localStorage.setItem(TOKEN_KEY, token);
-        localStorage.setItem(USER_KEY, JSON.stringify(DEMO_USER));
-
-        this.currentUser = DEMO_USER;
-        return { user: DEMO_USER, token };
+        return { user, token: response.tokens.access };
     }
 
     async register(payload: RegisterPayload): Promise<AuthResult> {
-        await delay(800);
-
-        // En production : vérifier que l'email n'existe pas déjà
-        const newUser: User = {
-            id: `u${Date.now()}`,
-            firstName: payload.firstName,
-            lastName: payload.lastName,
+        // Étape 1 — Créer le compte
+        await authApi.register({
+            first_name: payload.firstName,
+            last_name: payload.lastName,
             email: payload.email,
+            password: payload.password,
             phone: payload.phone,
-            createdAt: new Date(),
-        };
+        });
 
-        const token = `mock-jwt-${Date.now()}`;
-        localStorage.setItem(TOKEN_KEY, token);
-        localStorage.setItem(USER_KEY, JSON.stringify(newUser));
-
-        this.currentUser = newUser;
-        return { user: newUser, token };
+        // Étape 2 — Se connecter pour obtenir les tokens
+        return this.login({ email: payload.email, password: payload.password });
     }
 
     logout(): void {
-        // Supprime le token et l'utilisateur du storage
-        localStorage.removeItem(TOKEN_KEY);
-        localStorage.removeItem(USER_KEY);
-        this.currentUser = null;
+        const refresh = localStorage.getItem("auth_refresh") ?? "";
+        // Blacklist côté backend (fire & forget, pas bloquant)
+        if (refresh) {
+            authApi.logout(refresh).catch(() => { });
+        }
+        useAuthStore.getState().clearAuth();
     }
 
     getCurrentUser(): User | null {
-        // 1. Retourne le cache mémoire si disponible
-        if (this.currentUser) return this.currentUser;
-
-        // 2. Sinon lit depuis localStorage (après refresh de page)
-        const stored = localStorage.getItem(USER_KEY);
-        if (stored) {
-            try {
-                this.currentUser = JSON.parse(stored);
-                return this.currentUser;
-            } catch {
-                // JSON invalide → nettoie le storage
-                localStorage.removeItem(USER_KEY);
-            }
-        }
-
-        return null;
+        const store = useAuthStore.getState();
+        if (!store.user) return null;
+        return {
+            id: store.user.id,
+            firstName: store.user.firstName,
+            lastName: store.user.lastName,
+            email: store.user.email,
+            phone: "",
+            createdAt: new Date(),
+        };
     }
 
     isAuthenticated(): boolean {
-        return !!localStorage.getItem(TOKEN_KEY);
+        return !!localStorage.getItem("auth_token");
     }
 }
+
+

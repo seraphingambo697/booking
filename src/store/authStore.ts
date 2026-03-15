@@ -1,41 +1,76 @@
 /**
  * src/store/authStore.ts
+ * Store Zustand pour l'authentification.
  *
- * Store Zustand pour l'état d'authentification global.
+ * Gère les deux tokens JWT :
+ *   - access  : durée courte (60min), envoyé dans chaque requête
+ *   - refresh : durée longue (7j),   utilisé pour renouveler l'access
  *
- * Différence avec AuthPresenter/AuthViewModel :
- * - AuthViewModel : état UI (messages d'erreur, chargement, initiales...)
- * - authStore : état global minimal (userId, isAuthenticated)
- *
- * Le store est utilisé par les hooks qui ont besoin de l'userId
- * (useBooking, useMyBookings) sans passer par le presenter auth.
- *
- * Synchronisé par useAuth → quand onLogin réussit, setAuth() est appelé.
+ * Persistance dans localStorage :
+ *   - "auth_token"   → access token (lu par apiClient.ts)
+ *   - "auth_refresh" → refresh token
+ *   - "auth_user"    → profil utilisateur sérialisé
  */
-
 import { create } from "zustand";
 
-interface AuthStore {
-    /** ID de l'utilisateur connecté (null si non connecté) */
-    userId: string | null;
-
-    /** true si un utilisateur est connecté */
-    isAuthenticated: boolean;
-
-    /** Connecte un utilisateur */
-    setAuth: (userId: string) => void;
-
-    /** Déconnecte l'utilisateur */
-    clearAuth: () => void;
+interface AuthUser {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
-    userId: null,
+interface AuthStore {
+    user: AuthUser | null;
+    isAuthenticated: boolean;
+
+    /** Appelé après login/register réussi */
+    setAuth: (user: AuthUser, accessToken: string, refreshToken: string) => void;
+
+    /** Appelé au logout */
+    clearAuth: () => void;
+
+    /** Charge l'état depuis localStorage au démarrage */
+    hydrate: () => void;
+
+    /** Expose l'ID pour compatibilité avec les repositories */
+    userId: string | null;
+}
+
+export const useAuthStore = create<AuthStore>((set, get) => ({
+    user: null,
     isAuthenticated: false,
+    userId: null,
 
-    setAuth: (userId) =>
-        set({ userId, isAuthenticated: true }),
+    setAuth: (user, accessToken, refreshToken) => {
+        localStorage.setItem("auth_token", accessToken);
+        localStorage.setItem("auth_refresh", refreshToken);
+        localStorage.setItem("auth_user", JSON.stringify(user));
+        set({ user, isAuthenticated: true, userId: user.id });
+    },
 
-    clearAuth: () =>
-        set({ userId: null, isAuthenticated: false }),
+    clearAuth: () => {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_refresh");
+        localStorage.removeItem("auth_user");
+        set({ user: null, isAuthenticated: false, userId: null });
+    },
+
+    hydrate: () => {
+        const raw = localStorage.getItem("auth_user");
+        const token = localStorage.getItem("auth_token");
+        if (raw && token) {
+            try {
+                const user = JSON.parse(raw) as AuthUser;
+                set({ user, isAuthenticated: true, userId: user.id });
+            } catch {
+                // JSON corrompu → on nettoie
+                localStorage.removeItem("auth_user");
+                localStorage.removeItem("auth_token");
+                localStorage.removeItem("auth_refresh");
+            }
+        }
+    },
 }));
+

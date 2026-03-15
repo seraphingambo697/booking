@@ -1,56 +1,60 @@
+
 /**
  * src/repositories/UserRepository.ts
- *
- * Implémentation concrète de IUserRepository.
- * Utilisé par AuthService pour les opérations sur les comptes utilisateurs.
+ * Connecté au backend Django — plus de données mock.
  */
-
-import { User } from "@/core/entities/User";
 import { IUserRepository } from "@/interfaces/repositories/IUserRepository";
+import { User } from "@/core/entities/User";
+import { authApi } from "@/api/authApi";
+import { ApiUser } from "@/types/api.types";
 
-/** Utilisateur de démonstration */
-const MOCK_USERS: User[] = [
-    {
-        id: "u1",
-        firstName: "Marie",
-        lastName: "Dupont",
-        email: "demo@luxstay.fr",
-        phone: "+33 6 12 34 56 78",
-        createdAt: new Date("2024-01-01"),
-    },
-];
-
-const userStore: User[] = [...MOCK_USERS];
-
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+function toUser(api: ApiUser): User {
+    return {
+        id: api.id,
+        firstName: api.first_name,
+        lastName: api.last_name,
+        email: api.email,
+        phone: api.phone ?? "",
+        createdAt: new Date(api.created_at),
+    };
+}
 
 export class UserRepository implements IUserRepository {
-    async findById(id: string): Promise<User | null> {
-        await delay(200);
-        return userStore.find((u) => u.id === id) ?? null;
+
+    async findById(_id: string): Promise<User | null> {
+        // Le backend n'expose que /users/me/ — on appelle ça
+        try {
+            const api = await authApi.getMe();
+            return toUser(api);
+        } catch {
+            return null;
+        }
     }
 
-    async findByEmail(email: string): Promise<User | null> {
-        await delay(200);
-        return userStore.find((u) => u.email === email) ?? null;
+    async findByEmail(_email: string): Promise<User | null> {
+        // Pas d'endpoint de lookup par email côté frontend
+        // La vérification se fait lors du login (erreur 401 si inconnu)
+        return null;
     }
 
     async create(userData: Omit<User, "id" | "createdAt">): Promise<User> {
-        await delay(400);
-        const newUser: User = {
-            id: `u${Date.now()}`,
-            ...userData,
-            createdAt: new Date(),
-        };
-        userStore.push(newUser);
-        return newUser;
+        const api = await authApi.register({
+            first_name: userData.firstName,
+            last_name: userData.lastName,
+            email: userData.email,
+            password: (userData as unknown as { password: string }).password,
+            phone: userData.phone,
+        });
+        return toUser(api);
     }
 
     async update(id: string, data: Partial<User>): Promise<User> {
-        await delay(300);
-        const user = userStore.find((u) => u.id === id);
-        if (!user) throw new Error("Utilisateur introuvable");
-        Object.assign(user, data);
-        return user;
+        const api = await authApi.updateMe({
+            first_name: data.firstName,
+            last_name: data.lastName,
+            phone: data.phone,
+            email: data.email,
+        });
+        return toUser(api);
     }
 }
