@@ -15,6 +15,8 @@ import { LoginCredentials, RegisterPayload } from "@/interfaces/services/IAuthSe
  */
 export async function loginUser(credentials: LoginCredentials): Promise<ApiAuthResponse> {
     const response = await apiClient.post<ApiAuthResponse>("/auth/login", credentials);
+    console.log("loginUser response.data:", response.data);
+
     return response.data;
 }
 
