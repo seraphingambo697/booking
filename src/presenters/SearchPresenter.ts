@@ -1,76 +1,79 @@
 /**
  * src/presenters/SearchPresenter.ts
+ * Implémentation du presenter pour la barre de recherche.
  *
- * Presenter de la barre de recherche.
+ * PATTERN : Le Presenter reçoit un callback onChange dans son constructeur.
+ * À chaque modification, il met à jour son ViewModel interne et appelle onChange.
+ * Le Hook React (useSearch) passe setViewModel comme callback → React re-render automatique.
  *
- * Gère l'état du formulaire de recherche et sa validation.
- * Ne fait pas d'appel API — il prépare juste les paramètres
- * pour que le hook useSearch puisse naviguer vers /search.
- *
- * Pattern de notification :
- * Le presenter appelle onChange(newViewModel) à chaque mise à jour.
- * Le hook useSearch passe setState comme onChange → React re-render.
+ * Ce pattern évite toute dépendance React dans le Presenter (pur TypeScript testable).
  */
-
 import { ISearchPresenter } from "@/interfaces/presenters/ISearchPresenter";
 import { SearchViewModel } from "@/viewmodels/SearchViewModel";
 
 export class SearchPresenter implements ISearchPresenter {
-    /** État interne du ViewModel */
-    private vm: SearchViewModel = {
-        city: "",
-        checkIn: null,
-        checkOut: null,
-        guestCount: 2,
-        isValid: false,
-    };
+  /** État interne du Presenter */
+  private vm: SearchViewModel = {
+    city: "",
+    checkIn: null,
+    checkOut: null,
+    guestCount: 2,
+    isValid: false,
+  };
 
-    /**
-     * @param onChange - Callback appelé à chaque mise à jour du ViewModel
-     *                   → passe React setState dans le hook
-     */
-    constructor(private onChange: (vm: SearchViewModel) => void) { }
+  /**
+   * @param onChange Callback appelé à chaque modification du ViewModel.
+   *                 Dans le hook useSearch, c'est le setState de React.
+   */
+  constructor(private onChange: (vm: SearchViewModel) => void) {}
 
-    onCityChange(city: string): void {
-        this.update({
-            city,
-            cityError: city.trim() ? undefined : "Veuillez entrer une destination",
-        });
-        this.validate();
+  onCityChange(city: string): void {
+    this.update({
+      city,
+      // Efface l'erreur si l'utilisateur commence à taper
+      cityError: city.length === 0 ? "Veuillez entrer une destination" : undefined,
+    });
+    this.validate();
+  }
+
+  onDateChange(checkIn: Date | null, checkOut: Date | null): void {
+    // Règle métier : checkOut doit être après checkIn
+    let dateError: string | undefined;
+    if (checkIn && checkOut && checkOut <= checkIn) {
+      dateError = "La date de départ doit être après la date d'arrivée";
     }
+    this.update({ checkIn, checkOut, dateError });
+    this.validate();
+  }
 
-    onDateChange(checkIn: Date | null, checkOut: Date | null): void {
-        this.update({ checkIn, checkOut, dateError: undefined });
-        this.validate();
-    }
+  onGuestCountChange(count: number): void {
+    // Règle métier : entre 1 et 10 voyageurs
+    this.update({ guestCount: Math.max(1, Math.min(10, count)) });
+  }
 
-    onGuestCountChange(count: number): void {
-        // Contrainte métier : entre 1 et 10 voyageurs
-        this.update({ guestCount: Math.max(1, Math.min(10, count)) });
-    }
+  onSubmit(): void {
+    // La navigation est gérée par le Hook (useSearch) qui connait React Router
+    // Le Presenter valide uniquement, ne navigue pas directement
+    this.validate();
+  }
 
-    onSubmit(): void {
-        // La navigation est gérée dans le hook useSearch (nécessite useNavigate)
-        // Le presenter valide mais ne navigue pas (pas de dépendance React Router)
-        this.validate();
-    }
+  /** Calcule si le formulaire peut être soumis */
+  private validate(): void {
+    const isValid =
+      this.vm.city.trim().length > 0 &&
+      this.vm.checkIn !== null &&
+      this.vm.checkOut !== null &&
+      !this.vm.dateError;
+    this.update({ isValid });
+  }
 
-    /** Recalcule isValid à partir de l'état courant */
-    private validate(): void {
-        const isValid =
-            this.vm.city.trim().length > 0 &&
-            this.vm.checkIn !== null &&
-            this.vm.checkOut !== null;
-        this.update({ isValid });
-    }
+  /** Met à jour le ViewModel et notifie React */
+  private update(partial: Partial<SearchViewModel>): void {
+    this.vm = { ...this.vm, ...partial };
+    this.onChange(this.vm);
+  }
 
-    /** Met à jour le ViewModel et notifie la vue */
-    private update(partial: Partial<SearchViewModel>): void {
-        this.vm = { ...this.vm, ...partial };
-        this.onChange(this.vm);
-    }
-
-    getViewModel(): SearchViewModel {
-        return this.vm;
-    }
+  getViewModel(): SearchViewModel {
+    return this.vm;
+  }
 }

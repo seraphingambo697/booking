@@ -4,10 +4,14 @@ export interface CreateBookingPayload {
     userId: string;
     roomId: string;
     hotelId: string;
+    hotelName: string;
+    roomName: string;
     checkIn: Date;
     checkOut: Date;
     guestCount: number;
     guestInfo: GuestInfo;
+    totalPrice: number;
+    currency: string;
 }
 
 export interface IBookingRepository {
@@ -16,3 +20,7 @@ export interface IBookingRepository {
     findById(id: string): Promise<Booking | null>;
     cancel(id: string): Promise<Booking>;
 }
+
+
+
+

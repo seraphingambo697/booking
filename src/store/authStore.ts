@@ -18,6 +18,7 @@ interface AuthUser {
     email: string;
     firstName: string;
     lastName: string;
+    pseudo: string;
     isAdmin: boolean;
 }
 
@@ -65,7 +66,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
                 const user = JSON.parse(raw) as AuthUser;
                 set({ user, isAuthenticated: true, userId: user.id });
             } catch {
-                // JSON corrompu → on nettoie
                 localStorage.removeItem("auth_user");
                 localStorage.removeItem("auth_token");
                 localStorage.removeItem("auth_refresh");
@@ -73,4 +73,3 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         }
     },
 }));
-

@@ -131,6 +131,7 @@ export interface ApiUser {
     first_name: string;
     last_name: string;
     phone: string;
+    pseudo: string;
     is_active: boolean;
     is_admin: boolean;
     created_at: string;

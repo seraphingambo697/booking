@@ -1,92 +1,64 @@
 /**
  * src/services/HotelService.ts
- *
- * Implémentation concrète de IHotelService.
- *
- * Le Service orchestre les appels au Repository et applique
- * la logique métier (tri, filtre, validation des règles de gestion).
- *
- * Le Service reçoit IHotelRepository en injection de dépendance,
- * pas HotelRepository directement → couplage faible, testabilité maximale.
- *
- * Injection de dépendance :
- * const service = new HotelService(new HotelRepository())     // Production
- * const service = new HotelService(new MockHotelRepository()) // Tests
+ * Service pour la logique métier des hôtels.
  */
-
-import { Hotel } from "@/core/entities/Hotel";
 import { IHotelService, SortOption, HotelFilters } from "@/interfaces/services/IHotelService";
 import { IHotelRepository, SearchParams } from "@/interfaces/repositories/IHotelRepository";
+import { Hotel } from "@/core/entities/Hotel";
 
 export class HotelService implements IHotelService {
-    /**
-     * @param hotelRepo - Repository injecté (production ou mock)
-     */
-    constructor(private hotelRepo: IHotelRepository) { }
+  /**
+   * L'injection de dépendance via le constructeur permet :
+   * - De tester avec un mock repository
+   * - De changer d'implémentation sans modifier le service
+   */
+  constructor(private hotelRepo: IHotelRepository) {}
 
-    async search(params: SearchParams): Promise<Hotel[]> {
-        // Délègue la récupération au repository
-        const hotels = await this.hotelRepo.findAll(params);
+  async search(params: SearchParams): Promise<Hotel[]> {
+    /* Délègue la récupération au repository */
+    return this.hotelRepo.findAll(params);
+  }
 
-        // Applique les filtres supplémentaires (logique métier)
-        let result = hotels;
-        if (params.minPrice !== undefined) {
-            result = result.filter((h) => h.priceFrom >= params.minPrice!);
-        }
-        if (params.maxPrice !== undefined) {
-            result = result.filter((h) => h.priceFrom <= params.maxPrice!);
-        }
-        if (params.stars?.length) {
-            result = result.filter((h) => params.stars!.includes(h.stars));
-        }
-        if (params.amenities?.length) {
-            result = result.filter((h) =>
-                params.amenities!.every((a) => h.amenities.includes(a))
-            );
-        }
+  async getById(id: string): Promise<Hotel | null> {
+    return this.hotelRepo.findById(id);
+  }
 
-        return result;
-    }
+  /**
+   * Tri côté client (les données sont déjà chargées).
+   * Ne mute PAS le tableau original — retourne une copie triée.
+   */
+  sortHotels(hotels: Hotel[], sort: SortOption): Hotel[] {
+    const getField = (h: Hotel): number => ({
+      price:       h.priceFrom,
+      rating:      h.rating,
+      stars:       h.stars,
+      reviewCount: h.reviewCount,
+    }[sort.field] ?? h.priceFrom);
 
-    async getById(id: string): Promise<Hotel | null> {
-        return this.hotelRepo.findById(id);
-    }
+    return [...hotels].sort((a, b) => {
+      const diff = getField(a) - getField(b);
+      return sort.direction === "asc" ? diff : -diff;
+    });
+  }
 
-    /**
-     * Tri synchrone (les données sont déjà en mémoire).
-     * Retourne un NOUVEAU tableau (pas de mutation).
-     */
-    sortHotels(hotels: Hotel[], sort: SortOption): Hotel[] {
-        // Mapping des champs de tri vers les propriétés de l'entité
-        const getField = (h: Hotel): number => {
-            switch (sort.field) {
-                case "price": return h.priceFrom;
-                case "rating": return h.rating;
-                case "stars": return h.stars;
-                case "reviewCount": return h.reviewCount;
-                default: return h.rating;
-            }
-        };
-
-        return [...hotels].sort((a, b) => {
-            const diff = getField(a) - getField(b);
-            return sort.direction === "asc" ? diff : -diff;
-        });
-    }
-
-    /**
-     * Filtre synchrone côté client.
-     * Appelé par le Presenter quand l'utilisateur change les filtres.
-     */
-    filterHotels(hotels: Hotel[], filters: HotelFilters): Hotel[] {
-        return hotels.filter((h) => {
-            if (filters.minPrice !== undefined && h.priceFrom < filters.minPrice) return false;
-            if (filters.maxPrice !== undefined && h.priceFrom > filters.maxPrice) return false;
-            if (filters.stars?.length && !filters.stars.includes(h.stars)) return false;
-            if (filters.amenities?.length) {
-                if (!filters.amenities.every((a) => h.amenities.includes(a))) return false;
-            }
-            return true;
-        });
-    }
+  /**
+   * Filtrage côté client pour un retour UI instantané.
+   * Ne mute PAS le tableau original.
+   */
+  filterHotels(hotels: Hotel[], filters: HotelFilters): Hotel[] {
+    return hotels.filter((hotel) => {
+      /* Filtre par prix minimum */
+      if (filters.minPrice !== undefined && hotel.priceFrom < filters.minPrice) return false;
+      /* Filtre par prix maximum */
+      if (filters.maxPrice !== undefined && hotel.priceFrom > filters.maxPrice) return false;
+      /* Filtre par étoiles (l'hôtel doit correspondre à l'une des étoiles sélectionnées) */
+      if (filters.stars?.length && !filters.stars.includes(hotel.stars)) return false;
+      /* Filtre par équipements (l'hôtel doit avoir TOUS les équipements demandés) */
+      if (filters.amenities?.length) {
+        const hasAll = filters.amenities.every((a) => hotel.amenities.includes(a));
+        if (!hasAll) return false;
+      }
+      return true;
+    });
+  }
 }

@@ -1,38 +1,39 @@
 /**
  * src/store/searchStore.ts
- *
  * Store Zustand pour les paramètres de recherche.
  *
  * Persiste les critères de recherche entre les pages :
- * HomePage (saisie) → SearchResultsPage (résultats) → HotelDetailPage (contexte)
+ * - HomePage : l'utilisateur remplit le formulaire et cherche
+ * - SearchResultsPage : lit les params pour charger les hôtels
+ * - HotelDetailPage : conserve les dates pour pré-remplir la réservation
  *
- * Sans ce store, les paramètres seraient perdus à chaque navigation.
- * Alternative : les passer en query params dans l'URL (plus SEO-friendly).
+ * Alternative aux query params URL (plus simple pour les dates).
  */
-
 import { create } from "zustand";
 import { SearchParams } from "@/interfaces/repositories/IHotelRepository";
 
 interface SearchStore {
-    /** Paramètres de recherche courants (partiels car pas toujours complets) */
-    params: Partial<SearchParams>;
+  /** Paramètres courants de recherche (partiels car l'utilisateur peut chercher sans tout remplir) */
+  params: Partial<SearchParams>;
 
-    /** Met à jour les paramètres (merge avec les existants) */
-    setParams: (params: Partial<SearchParams>) => void;
+  /** Met à jour les paramètres (merge partiel) */
+  setParams: (params: Partial<SearchParams>) => void;
 
-    /** Remet les paramètres à zéro */
-    reset: () => void;
+  /** Réinitialise à l'état initial */
+  reset: () => void;
 }
 
+const DEFAULT_PARAMS: Partial<SearchParams> = {
+  city: "",
+  guestCount: 2,
+};
+
 export const useSearchStore = create<SearchStore>((set) => ({
-    // Valeurs par défaut
-    params: { city: "", guestCount: 2 },
+  params: DEFAULT_PARAMS,
 
-    setParams: (newParams) =>
-        set((state) => ({
-            params: { ...state.params, ...newParams },
-        })),
+  /** Merge partiel : setParams({ city: "Paris" }) ne perd pas les autres params */
+  setParams: (params) =>
+    set((state) => ({ params: { ...state.params, ...params } })),
 
-    reset: () =>
-        set({ params: { city: "", guestCount: 2 } }),
+  reset: () => set({ params: DEFAULT_PARAMS }),
 }));

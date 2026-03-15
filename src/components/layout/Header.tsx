@@ -7,17 +7,20 @@
  */
 
 import { Link, useNavigate } from "react-router-dom";
-import { Hotel, LogIn, LogOut, BookOpen, Menu, X } from "lucide-react";
+import { Hotel, LogIn, LogOut, BookOpen, Menu, X, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { ROUTES } from "@/router/routes";
+import { useAuthStore } from "@/store/authStore";
 
 export function Header() {
     const { vm, onLogout } = useAuth();
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { user } = useAuthStore();
+
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
@@ -28,27 +31,33 @@ export function Header() {
                     LuxStay
                 </Link>
 
-                {/* Navigation desktop */}
                 <nav className="hidden md:flex items-center gap-4">
                     {vm.isAuthenticated ? (
                         <>
-                            <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.MY_BOOKINGS)}>
-                                <BookOpen className="h-4 w-4 mr-2" />
-                                Mes réservations
-                            </Button>
-                            {/* Avatar avec initiales */}
-                            <div className="flex items-center gap-2">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarFallback className="text-xs bg-primary text-primary-foreground">
-                                        {vm.userInitials}
-                                    </AvatarFallback>
-                                </Avatar>
+                            <button onClick={() => navigate(ROUTES.MY_BOOKINGS)}
+                                className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors">
+                                <BookOpen className="h-4 w-4" /> Mes réservations
+                            </button>
+
+                            {user?.isAdmin && (
+                                <button onClick={() => navigate(ROUTES.ADMIN)}
+                                    className="flex items-center gap-1.5 text-sm text-blue-600 px-3 py-2 rounded-lg hover:bg-blue-50 font-medium">
+                                    <ShieldCheck className="h-4 w-4" /> Admin
+                                </button>
+                            )}
+
+                            <button onClick={() => navigate(ROUTES.PROFILE)}
+                                className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-slate-100 transition-colors">
+                                <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                                    {vm.userInitials}
+                                </div>
                                 <span className="text-sm font-medium">{vm.userName}</span>
-                            </div>
-                            <Button variant="outline" size="sm" onClick={onLogout} data-cy="logout-btn">
-                                <LogOut className="h-4 w-4 mr-2" />
-                                Déconnexion
-                            </Button>
+                            </button>
+
+                            <button onClick={onLogout}
+                                className="flex items-center gap-1.5 text-sm text-red-500 border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50">
+                                <LogOut className="h-4 w-4" /> Déconnexion
+                            </button>
                         </>
                     ) : (
                         <>

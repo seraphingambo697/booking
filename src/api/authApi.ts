@@ -1,7 +1,6 @@
-
 /**
  * src/api/authApi.ts
- * Appels API authentification — backend Django.
+ * Appels API authentification.
  *
  * Endpoints backend :
  *   POST /api/v1/auth/register/
@@ -90,5 +89,9 @@ export const authApi = {
     }>): Promise<ApiUser> => {
         const { data } = await apiClient.patch<ApiUser>("/users/me/", payload);
         return data;
+    },
+
+    deleteMe: async (): Promise<void> => {
+        await apiClient.delete("/users/me/");
     },
 };

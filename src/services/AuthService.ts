@@ -23,6 +23,7 @@ function toUser(api: ApiUser): User {
         firstName: api.first_name,
         lastName: api.last_name,
         email: api.email,
+        pseudo: api.pseudo,
         phone: api.phone ?? "",
         createdAt: new Date(api.created_at),
     };
@@ -45,6 +46,7 @@ export class AuthService implements IAuthService {
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                pseudo: user.pseudo,
                 isAdmin: response.user.is_admin,
             },
             response.tokens.access,
@@ -85,6 +87,7 @@ export class AuthService implements IAuthService {
             firstName: store.user.firstName,
             lastName: store.user.lastName,
             email: store.user.email,
+            pseudo: store.user.pseudo,
             phone: "",
             createdAt: new Date(),
         };
@@ -94,5 +97,3 @@ export class AuthService implements IAuthService {
         return !!localStorage.getItem("auth_token");
     }
 }
-
-

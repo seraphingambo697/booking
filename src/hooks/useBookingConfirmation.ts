@@ -1,43 +1,38 @@
 /**
  * src/hooks/useBookingConfirmation.ts
- *
- * Hook : page de confirmation de réservation (BookingConfirmationPage).
- *
- * Charge les détails de la réservation depuis l'id dans l'URL.
- * Expose onCancel pour annuler depuis cette page.
+ * Hook React pour la page de confirmation de réservation.
  */
-
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { BookingConfirmationPresenter } from "@/presenters/BookingConfirmationPresenter";
 import { BookingConfirmationViewModel } from "@/viewmodels/BookingConfirmationViewModel";
-import { BookingService } from "@/services/BookingService";
 import { BookingRepository } from "@/repositories/BookingRepository";
+import { BookingService } from "@/services/BookingService";
 
-const bookingRepository = new BookingRepository();
-const bookingService = new BookingService(bookingRepository);
+const bookingRepo = new BookingRepository();
+const bookingService = new BookingService(bookingRepo);
 
 export function useBookingConfirmation(bookingId: string) {
-    const [vm, setVm] = useState<BookingConfirmationViewModel>({
-        bookingId: "", bookingRef: "", hotelName: "", roomName: "",
-        checkIn: "", checkOut: "", nights: "", guests: "",
-        totalPrice: "", status: "", statusColor: "", guestName: "",
-        guestEmail: "", canCancel: false, isLoading: true, hasError: false,
-    });
+  const [vm, setVm] = useState<BookingConfirmationViewModel>({
+    bookingId: "", bookingRef: "", hotelName: "", roomName: "",
+    checkIn: "", checkOut: "", nights: "", guests: "",
+    totalPrice: "", status: "", statusColor: "",
+    guestName: "", guestEmail: "",
+    canCancel: false, isLoading: true, hasError: false,
+  });
 
-    const presenterRef = useRef(
-        new BookingConfirmationPresenter(bookingService, setVm)
-    );
+  const presenterRef = useRef(
+    new BookingConfirmationPresenter(bookingService, setVm)
+  );
 
-    useEffect(() => {
-        if (bookingId) {
-            presenterRef.current.loadConfirmation(bookingId);
-        }
-    }, [bookingId]);
+  useEffect(() => {
+    if (bookingId) {
+      presenterRef.current.loadConfirmation(bookingId);
+    }
+  }, [bookingId]);
 
-    const onCancel = useCallback(
-        () => presenterRef.current.onCancel(bookingId),
-        [bookingId]
-    );
+  const onCancel = useCallback(() => {
+    presenterRef.current.onCancel(bookingId);
+  }, [bookingId]);
 
-    return { vm, onCancel };
+  return { vm, onCancel };
 }

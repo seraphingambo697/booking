@@ -1,4 +1,3 @@
-
 /**
  * src/api/hotelApi.ts
  * Appels API hôtels et chambres — backend Django.
@@ -112,5 +111,37 @@ export const hotelApi = {
             amenities: params.amenities,
         });
         return data ?? [];
+    },
+};
+
+// ── CRUD Rooms (admin) ────────────────────────────────────────────────────────
+
+export const roomApi = {
+    /** POST /hotels/{id}/rooms/ */
+    createRoom: async (hotelId: string, payload: {
+        name: string; type: string; description: string;
+        price_per_night: number; currency: string;
+        capacity: number; size_sqm: number;
+        bed_count: number; bed_type: string; floor: number;
+        amenities: string[]; images: string[]; is_available: boolean;
+    }): Promise<ApiRoom> => {
+        const { data } = await apiClient.post<ApiRoom>(`/hotels/${hotelId}/rooms/`, payload);
+        return data;
+    },
+
+    /** PATCH /hotels/{id}/rooms/{rid}/ */
+    updateRoom: async (hotelId: string, roomId: string, payload: Partial<{
+        name: string; type: string; description: string;
+        price_per_night: number; capacity: number;
+        size_sqm: number; bed_count: number; bed_type: string;
+        floor: number; amenities: string[]; images: string[]; is_available: boolean;
+    }>): Promise<ApiRoom> => {
+        const { data } = await apiClient.patch<ApiRoom>(`/hotels/${hotelId}/rooms/${roomId}/`, payload);
+        return data;
+    },
+
+    /** DELETE /hotels/{id}/rooms/{rid}/ — pas d'endpoint backend, on met is_available=false */
+    disableRoom: async (hotelId: string, roomId: string): Promise<void> => {
+        await apiClient.patch(`/hotels/${hotelId}/rooms/${roomId}/`, { is_available: false });
     },
 };

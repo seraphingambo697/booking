@@ -12,7 +12,8 @@ import { BookingStatus } from "@/core/enums/BookingStatus";
 import { useAuthStore } from "@/store/authStore";
 import { ROUTES } from "@/router/routes";
 import { countNights } from "@/lib/dateUtils";
-import { formatDate, formatNights, formatPrice } from "@/lib/formatters";
+import { formatDate, formatNights, formatPrice } from "@/lib/utils";
+//import { formatDate, formatNights, formatPrice } from "@/lib/formatters";
 
 const bookingRepo = new BookingRepository();
 const bookingService = new BookingService(bookingRepo);

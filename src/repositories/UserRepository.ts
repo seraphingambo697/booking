@@ -1,4 +1,3 @@
-
 /**
  * src/repositories/UserRepository.ts
  * Connecté au backend Django — plus de données mock.
@@ -14,6 +13,7 @@ function toUser(api: ApiUser): User {
         firstName: api.first_name,
         lastName: api.last_name,
         email: api.email,
+        pseudo: api.pseudo,
         phone: api.phone ?? "",
         createdAt: new Date(api.created_at),
     };

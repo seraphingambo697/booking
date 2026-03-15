@@ -1,73 +1,47 @@
 /**
  * src/lib/dateUtils.ts
+ * Utilitaires spécifiques à la manipulation des dates.
  *
- * Utilitaires de manipulation et de calcul de dates.
- *
- * Toutes les fonctions retournent des valeurs brutes (nombre, Date).
- * Le formatage visuel (string) est dans formatters.ts.
- *
- * Utilise date-fns pour des calculs précis qui gèrent :
- * - Les fuseaux horaires
- * - Les années bissextiles
- * - Les changements d'heure (été/hiver)
+ * Centralisés ici pour faciliter les tests unitaires
+ * et éviter la duplication dans les Presenters.
  */
-
-import { differenceInDays, addDays, isAfter, isBefore, isSameDay } from "date-fns";
+import { addDays, isBefore, isAfter, startOfDay } from "date-fns";
 
 /**
- * Calcule le nombre de nuits entre deux dates.
- * Minimum 1 nuit (même si checkIn = checkOut).
- *
- * @param checkIn - Date d'arrivée
- * @param checkOut - Date de départ
- * @returns Nombre de nuits (≥ 1)
+ * Vérifie si une date est dans le passé (avant aujourd'hui).
+ * Utilisé pour désactiver les jours passés dans le calendrier.
  */
-export function countNights(checkIn: Date, checkOut: Date): number {
-    return Math.max(1, differenceInDays(checkOut, checkIn));
+export function isPastDate(date: Date): boolean {
+    return isBefore(startOfDay(date), startOfDay(new Date()));
 }
 
 /**
- * Retourne la date minimale de départ (lendemain du check-in).
- * Utilisée pour désactiver les dates invalides dans le DatePicker.
- *
- * @param checkIn - Date d'arrivée sélectionnée
- * @returns Date minimum de départ
+ * Vérifie si une date de départ est valide par rapport à l'arrivée.
+ * @param checkIn Date d'arrivée
+ * @param checkOut Date de départ souhaitée
+ * @returns true si checkOut est strictement après checkIn
+ */
+export function isValidCheckOut(checkIn: Date, checkOut: Date): boolean {
+    return isAfter(checkOut, checkIn);
+}
+
+/**
+ * Retourne la date de départ minimum suggérée (lendemain de l'arrivée).
+ * @param checkIn Date d'arrivée sélectionnée
  */
 export function getMinCheckOut(checkIn: Date): Date {
     return addDays(checkIn, 1);
 }
 
 /**
- * Vérifie si une date est dans le passé.
- * Utilisée pour désactiver les dates passées dans le calendrier.
- *
- * @param date - Date à vérifier
- * @returns true si la date est passée
+ * Retourne la date d'arrivée minimum (aujourd'hui).
  */
-export function isPastDate(date: Date): boolean {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return isBefore(date, today);
+export function getMinCheckIn(): Date {
+    return startOfDay(new Date());
 }
 
 /**
- * Vérifie si une date est comprise dans une plage.
- * Utilisée pour mettre en surbrillance les dates entre checkIn et checkOut.
- *
- * @param date - Date à tester
- * @param start - Début de la plage
- * @param end - Fin de la plage
- * @returns true si la date est dans la plage
+ * Re-export depuis utils.ts pour compatibilité des imports existants.
+ * Les fonctions résident dans utils.ts mais sont accessibles depuis dateUtils.ts.
  */
-export function isInRange(date: Date, start: Date, end: Date): boolean {
-    return isAfter(date, start) && isBefore(date, end);
-}
-
-/**
- * Retourne aujourd'hui à minuit (pour des comparaisons propres).
- */
-export function getToday(): Date {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return today;
-}
+export { countNights } from "@/lib/utils";
