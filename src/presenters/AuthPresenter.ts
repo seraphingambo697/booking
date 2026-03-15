@@ -37,7 +37,6 @@ export class AuthPresenter implements IAuthPresenter {
                 isAuthenticated: true,
                 userName: `${user.firstName} ${user.lastName}`,
                 userEmail: user.email,
-                // Précalcule les initiales pour le composant Avatar
                 userInitials: getInitials(user.firstName, user.lastName),
                 avatarUrl: user.avatarUrl,
             });
