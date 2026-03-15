@@ -11,6 +11,8 @@ export interface RoomViewModel {
 
     name: string;
 
+    hotelId: string;
+
     type: string;
 
     description: string;

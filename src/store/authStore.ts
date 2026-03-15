@@ -35,11 +35,10 @@ interface AuthStore {
     /** Charge l'état depuis localStorage au démarrage */
     hydrate: () => void;
 
-    /** Expose l'ID pour compatibilité avec les repositories */
     userId: string | null;
 }
 
-export const useAuthStore = create<AuthStore>((set, get) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
     user: null,
     isAuthenticated: false,
     userId: null,

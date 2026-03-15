@@ -9,20 +9,20 @@ import { ApiRoom } from "@/types/api.types";
 
 function toRoom(api: ApiRoom): Room {
   return {
-    id:            api.id,
-    hotelId:       api.hotel_id,
-    type:          api.type as Room["type"],
-    name:          api.name,
-    description:   api.description,
+    id: api.id,
+    hotelId: api.hotel_id,
+    type: api.type as Room["type"],
+    name: api.name,
+    description: api.description,
     pricePerNight: api.price_per_night,
-    currency:      api.currency,
-    capacity:      api.capacity,
-    size:          api.size_sqm,
-    images:        api.images ?? [],
-    amenities:     api.amenities ?? [],
-    isAvailable:   api.is_available,
-    bedCount:      api.bed_count,
-    bedType:       api.bed_type,
+    currency: api.currency,
+    capacity: api.capacity,
+    size: api.size_sqm,
+    images: api.images ?? [],
+    amenities: api.amenities ?? [],
+    isAvailable: api.is_available,
+    bedCount: api.bed_count,
+    bedType: api.bed_type,
   };
 }
 
@@ -33,13 +33,13 @@ export class RoomRepository implements IRoomRepository {
     return apiRooms.map(toRoom);
   }
 
-  async findById(id: string): Promise<Room | null> {
+  async findById(_id: string): Promise<Room | null> {
     // Sans hotelId on ne peut pas appeler l'endpoint direct
     // On retourne null — le Presenter doit utiliser findByHotelId
     return null;
   }
 
-  async checkAvailability(roomId: string): Promise<boolean> {
+  async checkAvailability(_roomId: string): Promise<boolean> {
     // La vraie disponibilité est vérifiée via checkAvailability du HotelRepository
     // Cette méthode est conservée pour compatibilité interface
     return true;

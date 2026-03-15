@@ -1,0 +1,28 @@
+{
+  "validBooking": {
+    "id": "bk-1",
+    "hotelId": "h1",
+    "roomId": "r1",
+    "checkIn": "2025-12-20",
+    "checkOut": "2025-12-23",
+    "nights": 3,
+    "adults": 2,
+    "children": 0,
+    "totalPrice": 1050,
+    "currency": "EUR",
+    "status": "CONFIRMED"
+  },
+  "pendingBooking": {
+    "id": "bk-2",
+    "hotelId": "h2",
+    "roomId": "r2",
+    "checkIn": "2025-12-28",
+    "checkOut": "2025-12-30",
+    "nights": 2,
+    "adults": 1,
+    "children": 0,
+    "totalPrice": 360,
+    "currency": "EUR",
+    "status": "PENDING"
+  }
+}

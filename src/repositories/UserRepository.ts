@@ -48,7 +48,7 @@ export class UserRepository implements IUserRepository {
         return toUser(api);
     }
 
-    async update(id: string, data: Partial<User>): Promise<User> {
+    async update(_id: string, data: Partial<User>): Promise<User> {
         const api = await authApi.updateMe({
             first_name: data.firstName,
             last_name: data.lastName,

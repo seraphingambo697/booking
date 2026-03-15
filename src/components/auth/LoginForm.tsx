@@ -29,11 +29,10 @@ export function LoginForm({ isLoading, hasError, errorMessage, onSubmit }: Login
         if (email && password) onSubmit({ email, password });
     };
 
-    /** Pré-remplit avec le compte démo */
-    const fillDemo = () => {
+    /*const fillDemo = () => {
         setEmail("demo@luxstay.fr");
         setPassword("demo123");
-    };
+    };*/
 
     return (
         <div className="w-full max-w-md">
@@ -48,7 +47,7 @@ export function LoginForm({ isLoading, hasError, errorMessage, onSubmit }: Login
             </div>
 
             {/* Encart démo */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+            {/*<div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
                 <p className="text-sm font-medium text-blue-700 mb-1">🧪 Compte de démonstration</p>
                 <p className="text-xs text-blue-600 mb-2">
                     Email : <code className="font-mono">demo@luxstay.fr</code>
@@ -62,7 +61,7 @@ export function LoginForm({ isLoading, hasError, errorMessage, onSubmit }: Login
                 >
                     Utiliser le compte démo →
                 </button>
-            </div>
+            </div>*/}
 
             {/* Erreur */}
             {hasError && (

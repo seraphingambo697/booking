@@ -1,0 +1,19 @@
+{
+  "validUser": {
+    "email": "demo@luxstay.fr",
+    "password": "demo123",
+    "firstName": "Marie",
+    "lastName": "Dupont"
+  },
+  "invalidUser": {
+    "email": "wrong@email.com",
+    "password": "wrongpassword"
+  },
+  "newUser": {
+    "firstName": "Jean",
+    "lastName": "Martin",
+    "email": "jean.martin@test.fr",
+    "password": "password123",
+    "phone": "+33 6 99 88 77 66"
+  }
+}

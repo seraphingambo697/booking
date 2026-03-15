@@ -1,0 +1,18 @@
+{
+  "validHotel": {
+    "id": "h1",
+    "name": "Le Grand Palais",
+    "city": "Paris",
+    "stars": 5,
+    "rating": 4.8,
+    "priceFrom": 350
+  },
+  "niceHotel": {
+    "id": "h2",
+    "name": "Hôtel Riviera Nice",
+    "city": "Nice",
+    "stars": 4,
+    "rating": 4.5,
+    "priceFrom": 180
+  }
+}

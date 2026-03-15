@@ -8,6 +8,7 @@ export interface LoginCredentials {
 export interface RegisterPayload {
     firstName: string;
     lastName: string;
+    pseudo: string;
     email: string;
     password: string;
     phone?: string;

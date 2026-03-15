@@ -1,14 +1,6 @@
 /**
  * src/api/hotelApi.ts
- * Appels API hôtels et chambres — backend Django.
- *
- * Endpoints backend :
- *   GET  /api/v1/hotels/                        → liste (filtrable)
- *   GET  /api/v1/hotels/{id}/                   → détail
- *   GET  /api/v1/hotels/{id}/rooms/             → chambres d'un hôtel
- *   GET  /api/v1/hotels/{id}/rooms/{rid}/       → détail chambre
- *   POST /api/v1/bookings/availability/         → chambres disponibles
- *   POST /api/v1/search/                        → recherche multi-critères
+ * Appels API hôtels et chambres — backend .
  */
 import { apiClient } from "./apiClient";
 import { ApiHotel, ApiRoom, ApiAvailableRoom, ApiSearchResult } from "@/types/api.types";
@@ -16,7 +8,6 @@ import { ApiHotel, ApiRoom, ApiAvailableRoom, ApiSearchResult } from "@/types/ap
 export const hotelApi = {
     /**
      * GET /hotels/?city=Paris&page_size=20
-     * Liste publique des hôtels (pas d'auth requise).
      */
     listHotels: async (params?: {
         city?: string;
@@ -30,7 +21,7 @@ export const hotelApi = {
 
     /**
      * GET /hotels/{id}/
-     * Détail d'un hôtel (pas d'auth requise).
+     * Détail d'un hôtel.
      */
     getHotelById: async (id: string): Promise<ApiHotel> => {
         const { data } = await apiClient.get<ApiHotel>(`/hotels/${id}/`);
@@ -39,7 +30,6 @@ export const hotelApi = {
 
     /**
      * GET /hotels/{id}/rooms/?available_only=true
-     * Chambres d'un hôtel (pas d'auth requise).
      */
     getRoomsByHotelId: async (
         hotelId: string,
@@ -62,13 +52,11 @@ export const hotelApi = {
 
     /**
      * POST /bookings/availability/
-     * Chambres disponibles pour un hôtel et des dates données.
-     * Retourne des chambres enrichies avec total_price et nights calculés.
      */
     checkAvailability: async (params: {
         hotel_id: string;
-        check_in: string;   // "YYYY-MM-DD"
-        check_out: string;  // "YYYY-MM-DD"
+        check_in: string;
+        check_out: string;
         adults?: number;
         children?: number;
     }): Promise<ApiAvailableRoom[]> => {
@@ -87,8 +75,6 @@ export const hotelApi = {
 
     /**
      * POST /search/
-     * Recherche multi-critères : ville + dates + voyageurs + filtres optionnels.
-     * Retourne les hôtels avec chambres disponibles + prix minimum.
      */
     searchHotels: async (params: {
         city: string;
@@ -129,7 +115,6 @@ export const roomApi = {
         return data;
     },
 
-    /** PATCH /hotels/{id}/rooms/{rid}/ */
     updateRoom: async (hotelId: string, roomId: string, payload: Partial<{
         name: string; type: string; description: string;
         price_per_night: number; capacity: number;
@@ -140,7 +125,6 @@ export const roomApi = {
         return data;
     },
 
-    /** DELETE /hotels/{id}/rooms/{rid}/ — pas d'endpoint backend, on met is_available=false */
     disableRoom: async (hotelId: string, roomId: string): Promise<void> => {
         await apiClient.patch(`/hotels/${hotelId}/rooms/${roomId}/`, { is_available: false });
     },

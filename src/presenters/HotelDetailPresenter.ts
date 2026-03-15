@@ -3,8 +3,6 @@
  * Presenter pour la page de détail d'un hôtel.
  *
  * Optimisation : charge l'hôtel ET ses chambres en parallèle avec Promise.all.
- * Sans Promise.all : 300ms + 300ms = 600ms d'attente
- * Avec Promise.all : max(300ms, 300ms) = 300ms d'attente
  */
 import { IHotelDetailPresenter } from "@/interfaces/presenters/IHotelDetailPresenter";
 import { IHotelService } from "@/interfaces/services/IHotelService";
@@ -25,7 +23,7 @@ export class HotelDetailPresenter implements IHotelDetailPresenter {
     private hotelService: IHotelService,
     private roomRepo: IRoomRepository,        // Accès direct au repo pour les chambres
     private onChange: (vm: HotelDetailViewModel) => void
-  ) {}
+  ) { }
 
   async loadHotel(id: string): Promise<void> {
     this.update({ isLoading: true, hasError: false });
@@ -44,6 +42,7 @@ export class HotelDetailPresenter implements IHotelDetailPresenter {
       this.update({
         isLoading: false,
         id: hotel.id,
+
         name: hotel.name,
         description: hotel.description,
         address: hotel.address,
@@ -78,16 +77,15 @@ export class HotelDetailPresenter implements IHotelDetailPresenter {
    */
   private mapRoom = (room: Room): RoomViewModel => ({
     id: room.id,
+    hotelId: room.hotelId,
     name: room.name,
     type: room.type,
     description: room.description,
-    // Affiché : "350 €/nuit"
     pricePerNight: `${formatPrice(room.pricePerNight, room.currency)}/nuit`,
-    // Pour calcul : 350
     priceRaw: room.pricePerNight,
-    capacity: formatGuests(room.capacity),        // "2 voyageurs"
-    size: `${room.size} m²`,                      // "32 m²"
-    bedInfo: `${room.bedCount} ${room.bedType}`,  // "1 Grand lit double"
+    capacity: formatGuests(room.capacity),
+    size: `${room.size} m²`,
+    bedInfo: `${room.bedCount} ${room.bedType}`,
     amenities: room.amenities,
     images: room.images,
     isAvailable: room.isAvailable,

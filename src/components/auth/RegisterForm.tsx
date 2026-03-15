@@ -7,7 +7,7 @@
  */
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { User, Mail, Lock, Phone, Eye, EyeOff, Hotel } from "lucide-react";
+import { User, Mail, Lock, Phone, Eye, EyeOff, Hotel, AtSign } from "lucide-react";
 import { RegisterPayload } from "@/interfaces/services/IAuthService";
 import { ROUTES } from "@/router/routes";
 
@@ -20,7 +20,7 @@ interface RegisterFormProps {
 
 export function RegisterForm({ isLoading, hasError, errorMessage, onSubmit }: RegisterFormProps) {
     const [form, setForm] = useState<RegisterPayload>({
-        firstName: "", lastName: "", email: "", password: "", phone: "",
+        firstName: "", lastName: "", email: "", password: "", phone: "", pseudo: "",
     });
     const [showPwd, setShowPwd] = useState(false);
 
@@ -57,7 +57,6 @@ export function RegisterForm({ isLoading, hasError, errorMessage, onSubmit }: Re
             )}
 
             <div className="space-y-4">
-                {/* Prénom + Nom */}
                 <div className="grid grid-cols-2 gap-3">
                     <div>
                         <label className="block text-sm font-medium mb-1.5">
@@ -93,6 +92,24 @@ export function RegisterForm({ isLoading, hasError, errorMessage, onSubmit }: Re
                     </div>
                 </div>
 
+                {/* Pseudo */}
+                <div>
+                    <label className="block text-sm font-medium mb-1.5">
+                        Pseudo <span className="text-muted-foreground text-xs font-normal">(optionnel)</span>
+                    </label>
+                    <div className="relative">
+                        <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <input
+                            type="text"
+                            value={form.pseudo}
+                            onChange={(e) => update("pseudo", e.target.value)}
+                            placeholder="ex: marie_dupont"
+                            data-cy="register-pseudo"
+                            className="w-full pl-9 pr-3 h-11 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                        />
+                    </div>
+                </div>
+
                 {/* Email */}
                 <div>
                     <label className="block text-sm font-medium mb-1.5">
@@ -111,7 +128,6 @@ export function RegisterForm({ isLoading, hasError, errorMessage, onSubmit }: Re
                     </div>
                 </div>
 
-                {/* Mot de passe */}
                 <div>
                     <label className="block text-sm font-medium mb-1.5">
                         Mot de passe <span className="text-destructive">*</span>

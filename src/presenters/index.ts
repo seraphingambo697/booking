@@ -103,7 +103,7 @@ export class HotelListPresenter {
     this.update({ activeFilters: filters });
   }
 
-  private mapToCard(h: typeof import("@/core/entities/Hotel").Hotel extends infer T ? any : any): HotelCardViewModel {
+  private mapToCard(h: any): HotelCardViewModel {
     return {
       id: h.id,
       name: h.name,
@@ -128,7 +128,6 @@ export class HotelListPresenter {
   getViewModel() { return this.vm; }
 }
 
-// ─── Hotel Detail Presenter ───────────────────────────────────────────────────
 
 export class HotelDetailPresenter {
   private vm: HotelDetailViewModel = {
@@ -180,6 +179,7 @@ export class HotelDetailPresenter {
       id: r.id,
       name: r.name,
       type: r.type,
+      hotelId: r.hotelId,
       description: r.description,
       pricePerNight: `${formatPrice(r.pricePerNight, r.currency)}/nuit`,
       priceRaw: r.pricePerNight,
@@ -367,8 +367,6 @@ export class BookingConfirmationPresenter {
 
   getViewModel() { return this.vm; }
 }
-
-// ─── My Bookings Presenter ────────────────────────────────────────────────────
 
 export class MyBookingsPresenter {
   private vm: MyBookingsViewModel = {
