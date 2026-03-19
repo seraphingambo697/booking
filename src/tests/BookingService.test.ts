@@ -9,7 +9,6 @@ import { IBookingRepository } from "@/interfaces/repositories/IBookingRepository
 import { Booking } from "@/core/entities/Booking";
 import { BookingStatus } from "@/core/enums/BookingStatus";
 
-// ── Mock repository 
 
 const mockBooking: Booking = {
   id: "b1",
@@ -50,7 +49,7 @@ describe("BookingService.calculatePrice", () => {
 
     expect(result.nights).toBe(3);
     expect(result.basePrice).toBe(1050);
-    expect(result.taxes).toBe(105);     // 10% arrondi supérieur
+    expect(result.taxes).toBe(105);
     expect(result.total).toBe(1155);
     expect(result.currency).toBe("EUR");
   });

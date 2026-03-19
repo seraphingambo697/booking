@@ -36,7 +36,7 @@ export const apiClient = axios.create({
   },
 });
 
-// ── Intercepteur REQUÊTE — injection du token JWT ─────────────────────────────
+// ── Intercepteur REQUÊTE — injection du token JWT 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("auth_token");
