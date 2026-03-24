@@ -1,8 +1,7 @@
 /**
- * cypress/e2e/booking/booking-confirmation.cy.ts
  * Tests E2E — page de confirmation de réservation.
  *
- * Couvre : affichage confirmation, numéro, récap, navigation.
+ * Couvre : affichage confirmation, numéro, récap.
  */
 
 describe("Page de confirmation de réservation", () => {
@@ -12,7 +11,7 @@ describe("Page de confirmation de réservation", () => {
     cy.fixture("bookings").as("bookings");
   });
 
-  // ── Confirmation après réservation ───────────────────────────────────────────
+  // ── Confirmation après réservation
 
   it("affiche la page de confirmation après une réservation réussie", function () {
     const { validUser } = this.users;
@@ -81,7 +80,7 @@ describe("Page de confirmation de réservation", () => {
     cy.contains(/accueil|retour/i).should("be.visible");
   });
 
-  // ── Navigation Mes réservations ──────────────────────────────────────────────
+  // ── Navigation Mes réservations
 
   it("navigue vers Mes réservations depuis la confirmation", function () {
     const { validUser } = this.users;
@@ -96,7 +95,7 @@ describe("Page de confirmation de réservation", () => {
     cy.url().should("include", "/bookings");
   });
 
-  // ── Accès direct confirmation sans réservation ───────────────────────────────
+  // ── Accès direct confirmation sans réservation 
 
   it("redirige si l'on accède directement à la confirmation sans réservation", () => {
     cy.visit("/booking/confirmation", { failOnStatusCode: false });

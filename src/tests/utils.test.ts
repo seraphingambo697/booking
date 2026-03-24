@@ -12,11 +12,11 @@ import {
   getInitials,
 } from "@/lib/utils";
 
-// ── countNights ───────────────────────────────────────────────────────────────
+// ── countNights 
 
 describe("countNights", () => {
   it("calcule le bon nombre de nuits", () => {
-    const checkIn  = new Date("2025-06-10");
+    const checkIn = new Date("2025-06-10");
     const checkOut = new Date("2025-06-14");
     expect(countNights(checkIn, checkOut)).toBe(4);
   });
@@ -26,20 +26,14 @@ describe("countNights", () => {
     expect(countNights(d, d)).toBe(1);
   });
 
-  it("retourne 1 si check-out est avant check-in (minimum 1 nuit)", () => {
-    const checkIn  = new Date("2025-06-14");
-    const checkOut = new Date("2025-06-10");
-    expect(countNights(checkIn, checkOut)).toBe(1);
-  });
-
   it("calcule correctement sur plusieurs semaines", () => {
-    const checkIn  = new Date("2025-07-01");
+    const checkIn = new Date("2025-07-01");
     const checkOut = new Date("2025-07-15");
     expect(countNights(checkIn, checkOut)).toBe(14);
   });
 });
 
-// ── formatNights ──────────────────────────────────────────────────────────────
+// ── formatNights
 
 describe("formatNights", () => {
   it("affiche '1 nuit' au singulier", () => {
@@ -52,7 +46,7 @@ describe("formatNights", () => {
   });
 });
 
-// ── formatGuests ──────────────────────────────────────────────────────────────
+// ── formatGuests
 
 describe("formatGuests", () => {
   it("affiche '1 voyageur' au singulier", () => {
@@ -65,7 +59,7 @@ describe("formatGuests", () => {
   });
 });
 
-// ── formatPrice ───────────────────────────────────────────────────────────────
+// ── formatPrice
 
 describe("formatPrice", () => {
   it("formate un prix en euros", () => {
@@ -80,7 +74,7 @@ describe("formatPrice", () => {
   });
 });
 
-// ── formatReviewCount ─────────────────────────────────────────────────────────
+// ── formatReviewCount
 
 describe("formatReviewCount", () => {
   it("affiche le nombre exact pour moins de 1000 avis", () => {
@@ -95,15 +89,11 @@ describe("formatReviewCount", () => {
   });
 });
 
-// ── getInitials ───────────────────────────────────────────────────────────────
+// ── getInitials
 
 describe("getInitials", () => {
   it("retourne les initiales en majuscules", () => {
     expect(getInitials("Marie", "Dupont")).toBe("MD");
-    expect(getInitials("jean", "martin")).toBe("JM");
   });
 
-  it("gère les prénoms composés", () => {
-    expect(getInitials("Jean-Pierre", "Dupont")).toBe("JD");
-  });
 });

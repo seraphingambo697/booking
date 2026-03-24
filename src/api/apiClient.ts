@@ -104,7 +104,7 @@ apiClient.interceptors.response.use(
     // Pas de réponse — problème réseau ou CORS
     if (!error.response) {
       return Promise.reject(
-        new Error("Impossible de contacter le serveur. Vérifiez que le backend est démarré sur http://localhost:8000.")
+        new Error("Impossible de contacter le serveur. ")
       );
     }
 

@@ -10,7 +10,7 @@ describe("Page de résultats de recherche", () => {
     cy.searchHotel("Paris", 3, 2);
   });
 
-  // ── Affichage ────────────────────────────────────────────────────────────────
+  // ── Affichage 
 
   it("affiche les résultats après une recherche", () => {
     cy.url().should("include", "/search");
@@ -72,8 +72,8 @@ describe("Page de résultats de recherche", () => {
     cy.searchHotel("VilleInconnueABC", 3, 2);
     cy.get("body").then(($body) => {
       const hasNoResults = $body.find('[data-cy="no-results"]').length > 0;
-      const hasMessage   = $body.text().toLowerCase().includes("aucun");
-      const hasEmpty     = $body.find('[data-cy="hotel-card"]').length === 0;
+      const hasMessage = $body.text().toLowerCase().includes("aucun");
+      const hasEmpty = $body.find('[data-cy="hotel-card"]').length === 0;
       expect(hasNoResults || hasMessage || hasEmpty).to.be.true;
     });
   });
@@ -85,7 +85,7 @@ describe("Page de résultats de recherche", () => {
     cy.get("body").then(($body) => {
       if ($body.find('[data-cy="date-checkout"]').length > 0) {
         const today = new Date().toISOString().split("T")[0];
-        const past  = new Date(Date.now() - 86400000 * 3).toISOString().split("T")[0];
+        const past = new Date(Date.now() - 86400000 * 3).toISOString().split("T")[0];
         cy.get('[data-cy="date-checkin"]').type(today);
         cy.get('[data-cy="date-checkout"]').type(past);
         cy.get('[data-cy="search-submit"]').click();

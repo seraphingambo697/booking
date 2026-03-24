@@ -12,7 +12,7 @@ export class HotelService implements IHotelService {
    * - De tester avec un mock repository
    * - De changer d'implémentation sans modifier le service
    */
-  constructor(private hotelRepo: IHotelRepository) {}
+  constructor(private hotelRepo: IHotelRepository) { }
 
   async search(params: SearchParams): Promise<Hotel[]> {
     /* Délègue la récupération au repository */
@@ -25,13 +25,12 @@ export class HotelService implements IHotelService {
 
   /**
    * Tri côté client (les données sont déjà chargées).
-   * Ne mute PAS le tableau original — retourne une copie triée.
    */
   sortHotels(hotels: Hotel[], sort: SortOption): Hotel[] {
     const getField = (h: Hotel): number => ({
-      price:       h.priceFrom,
-      rating:      h.rating,
-      stars:       h.stars,
+      price: h.priceFrom,
+      rating: h.rating,
+      stars: h.stars,
       reviewCount: h.reviewCount,
     }[sort.field] ?? h.priceFrom);
 
@@ -51,9 +50,7 @@ export class HotelService implements IHotelService {
       if (filters.minPrice !== undefined && hotel.priceFrom < filters.minPrice) return false;
       /* Filtre par prix maximum */
       if (filters.maxPrice !== undefined && hotel.priceFrom > filters.maxPrice) return false;
-      /* Filtre par étoiles (l'hôtel doit correspondre à l'une des étoiles sélectionnées) */
       if (filters.stars?.length && !filters.stars.includes(hotel.stars)) return false;
-      /* Filtre par équipements (l'hôtel doit avoir TOUS les équipements demandés) */
       if (filters.amenities?.length) {
         const hasAll = filters.amenities.every((a) => hotel.amenities.includes(a));
         if (!hasAll) return false;

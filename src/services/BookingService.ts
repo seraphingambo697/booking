@@ -12,7 +12,7 @@ import { Booking } from "@/core/entities/Booking";
 import { countNights } from "@/lib/utils";
 
 export class BookingService implements IBookingService {
-  constructor(private bookingRepo: IBookingRepository) {}
+  constructor(private bookingRepo: IBookingRepository) { }
 
   async create(payload: CreateBookingPayload): Promise<Booking> {
     return this.bookingRepo.create(payload);
