@@ -12,7 +12,7 @@ import {
   getInitials,
 } from "@/lib/utils";
 
-// ── countNights 
+// ─ countNights 
 
 describe("countNights", () => {
   it("calcule le bon nombre de nuits", () => {
