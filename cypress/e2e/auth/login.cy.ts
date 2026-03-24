@@ -41,10 +41,11 @@ describe("Page de connexion", () => {
 
   it("affiche une erreur avec un mauvais mot de passe", function () {
     const { validUser } = this.users;
+    const { invalidUser } = this.users;
     cy.get('[data-cy="login-email"]').type(validUser.email);
-    cy.get('[data-cy="login-password"]').type("WrongPassword!");
-    cy.get('[data-cy="login-submit"]').click();
+    cy.get('[data-cy="login-password"]').type(invalidUser.password);
     cy.contains(/incorrect|invalide|erreur/i).should("be.visible");
+    cy.get('[data-cy="login-submit"]').click();
     cy.url().should("include", "/login");
   });
 

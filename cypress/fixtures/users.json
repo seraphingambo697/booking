@@ -1,13 +1,13 @@
 {
   "validUser": {
-    "email": "demo@luxstay.fr",
-    "password": "demo123",
-    "firstName": "Marie",
-    "lastName": "Dupont"
+    "email": "daix@gmail.com",
+    "password": "Azerty_225",
+    "firstName": "pat",
+    "lastName": "daix"
   },
   "invalidUser": {
-    "email": "wrong@email.com",
-    "password": "wrongpassword"
+    "email": "daix@gmail.com",
+    "password": "12345678"
   },
   "newUser": {
     "firstName": "Jean",

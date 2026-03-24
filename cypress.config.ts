@@ -21,8 +21,8 @@ export default defineConfig({
     env: {
       ADMIN_EMAIL: "radmin@akkor.com",
       ADMIN_PASSWORD: "AdminPass123!",
-      USER_EMAIL: "seraphin@gmail.com",
-      USER_PASSWORD: "12345678#",
+      USER_EMAIL: "daix@gmail.com",
+      USER_PASSWORD: "Azerty_225",
     },
   },
 });
