@@ -20,7 +20,7 @@ export class AuthPresenter implements IAuthPresenter {
   constructor(
     private authService: IAuthService,
     private onChange: (vm: AuthViewModel) => void
-  ) {}
+  ) { }
 
   /**
    * Restaure la session depuis le localStorage au démarrage de l'app.

@@ -36,7 +36,6 @@ export function LoginForm({ isLoading, hasError, errorMessage, onSubmit }: Login
 
     return (
         <div className="w-full max-w-md">
-            {/* Logo */}
             <div className="text-center mb-8">
                 <div className="flex items-center justify-center gap-2 text-primary text-2xl font-bold mb-2">
                     <Hotel className="h-7 w-7" />
@@ -65,7 +64,10 @@ export function LoginForm({ isLoading, hasError, errorMessage, onSubmit }: Login
 
             {/* Erreur */}
             {hasError && (
-                <div className="bg-destructive/10 text-destructive border border-destructive/20 rounded-lg px-4 py-3 mb-4 text-sm">
+                <div
+                    data-cy="login-error"
+                    className="bg-destructive/10 text-destructive border border-destructive/20 rounded-lg px-4 py-3 mb-4 text-sm"
+                >
                     {errorMessage}
                 </div>
             )}
