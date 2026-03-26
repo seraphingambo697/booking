@@ -66,7 +66,6 @@ export class AuthService implements IAuthService {
             phone: payload.phone,
         });
 
-        // Étape 2 — Se connecter pour obtenir les tokens
         return this.login({ email: payload.email, password: payload.password });
     }
 

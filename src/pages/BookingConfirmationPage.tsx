@@ -28,6 +28,7 @@ export function BookingConfirmationPage() {
             <BookingConfirmationCard vm={vm} onCancel={onCancel} />
             <div className="max-w-2xl mx-auto mt-6 flex gap-3 justify-center flex-wrap">
                 <button onClick={() => navigate(ROUTES.MY_BOOKINGS)}
+                    data-cy="booking-confirm-btn"
                     className="border px-4 py-2 rounded-md text-sm font-medium hover:bg-accent flex items-center gap-2">
                     <BookOpen className="h-4 w-4" /> Mes réservations
                 </button>

@@ -1,11 +1,8 @@
 /**
- * src/components/auth/LoginForm.tsx
  * Formulaire de connexion.
  *
- * Affiche un encart "Compte démo" pour faciliter les tests.
  * Les data-cy sont pour les tests Cypress.
  *
- * Composant "vue stupide" : toute la logique est dans AuthPresenter via useAuth.
  */
 import { useState } from "react";
 import { Link } from "react-router-dom";

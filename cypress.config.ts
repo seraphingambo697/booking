@@ -19,10 +19,11 @@ export default defineConfig({
     supportFile: "cypress/support/e2e.ts",
 
     env: {
-      ADMIN_EMAIL: "radmin@akkor.com",
+      ADMIN_EMAIL: "admin@akkor.com",
       ADMIN_PASSWORD: "AdminPass123!",
       USER_EMAIL: "seraphin@gmail.com",
       USER_PASSWORD: "12345678#",
+
     },
   },
 });

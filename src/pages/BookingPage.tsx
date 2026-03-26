@@ -48,6 +48,8 @@ export function BookingPage() {
                             <div className="flex justify-between pt-4">
                                 <button onClick={onPrev} className="text-sm text-muted-foreground">← Retour</button>
                                 <button onClick={onSubmit} disabled={vm.isSubmitting}
+                                    data-cy="confirm-booking-btn"
+                                    //data-cy="confirm-booking"
                                     className="bg-primary text-primary-foreground px-6 py-2 rounded-md text-sm font-medium disabled:opacity-70">
                                     {vm.isSubmitting ? "Confirmation..." : `Confirmer et payer ${vm.totalPrice}`}
                                 </button>

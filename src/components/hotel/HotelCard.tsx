@@ -14,6 +14,7 @@ interface HotelCardProps {
 export function HotelCard({ hotel, onClick }: HotelCardProps) {
     return (
         <article
+            data-cy="hotel-card"
             onClick={onClick}
             className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group flex flex-col h-full"
         >

@@ -70,6 +70,7 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
         <div ref={ref} className="relative w-full">
             <div className="flex gap-1 bg-gray-100 p-1 rounded-2xl">
                 <button
+                    data-cy="checkin-trigger"
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkIn"); }}
                     className={`flex-1 flex items-center gap-3 px-4 rounded-xl text-left transition-all ${height} ${selecting === "checkIn" && open
@@ -90,6 +91,7 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
                 <div className="w-[1px] h-8 bg-gray-300 self-center" />
 
                 <button
+                    data-cy="checkout-trigger"
                     type="button"
                     onClick={() => { setOpen(true); setSelecting("checkOut"); }}
                     className={`flex-1 flex items-center gap-3 px-4 rounded-xl text-left transition-all ${height} ${selecting === "checkOut" && open
@@ -131,6 +133,7 @@ export function DateRangePicker({ checkIn, checkOut, onChange, error, height = "
 
                             return (
                                 <button
+                                    data-cy="calendar-day"
                                     key={i}
                                     type="button"
                                     disabled={disabled}

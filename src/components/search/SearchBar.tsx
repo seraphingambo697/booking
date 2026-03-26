@@ -33,6 +33,7 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                 <div className="relative flex-[1.5]">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
                     <input
+                        data-cy="search-city"
                         type="text"
                         placeholder="Destination"
                         value={vm.city}
@@ -45,6 +46,7 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                 {/* ── Sélecteur de dates ── */}
                 <div className="flex-[2] bg-gray-50 rounded-2xl">
                     <DateRangePicker
+                        data-cy="search-checkin"
                         checkIn={vm.checkIn}
                         checkOut={vm.checkOut}
                         onChange={(checkIn, checkOut) => presenter.onDateChange(checkIn, checkOut)}
@@ -62,6 +64,7 @@ export function SearchBar({ vm, presenter, onSubmit, variant = "hero" }: SearchB
                 </div>
 
                 <button
+                    data-cy="search-submit"
                     onClick={(e) => {
                         e.preventDefault();
                         onSubmit();

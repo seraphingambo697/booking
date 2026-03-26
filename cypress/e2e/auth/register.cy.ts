@@ -125,7 +125,7 @@ describe("Page d'inscription", () => {
     cy.get('[data-cy="register-submit"]').should("not.be.disabled").click();
     cy.url().should("not.include", "/register");
 
-    // Deuxième tentative avec le même email
+    //  avec le même email
     cy.visit("/register");
     cy.get('[data-cy="register-firstname"]').type("Bob");
     cy.get('[data-cy="register-lastname"]').type("Test");

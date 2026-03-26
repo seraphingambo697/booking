@@ -21,7 +21,6 @@ export interface LoginResponse {
 export const authApi = {
     /**
      * POST /auth/login/
-     * Retourne les tokens JWT + profil utilisateur.
      */
     login: async (credentials: {
         email: string;
@@ -34,7 +33,6 @@ export const authApi = {
     /**
      * POST /auth/register/
      * Crée un compte. Le backend retourne le profil (sans token automatique).
-     * Il faut ensuite appeler login() pour obtenir les tokens.
      */
     register: async (payload: {
         first_name: string;
@@ -49,7 +47,6 @@ export const authApi = {
 
     /**
      * POST /auth/logout/
-     * Blackliste le refresh token côté backend.
      */
     logout: async (refreshToken: string): Promise<void> => {
         await apiClient.post("/auth/logout/", { refresh: refreshToken });
@@ -57,7 +54,6 @@ export const authApi = {
 
     /**
      * POST /auth/refresh/
-     * Renouvelle l'access token avec le refresh token.
      */
     refresh: async (refreshToken: string): Promise<{ access: string }> => {
         // SimpleJWT retourne directement { access: "..." }, pas d'enveloppe

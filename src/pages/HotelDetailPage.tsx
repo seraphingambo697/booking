@@ -90,7 +90,7 @@ function RoomCard({ room, isSelected, onRoomSelect, onBook }: {
         SUITE: "Suite", DELUXE: "Deluxe", FAMILY: "Familiale",
     };
     return (
-        <div className={`bg-white rounded-2xl border overflow-hidden transition-all duration-200 ${isSelected ? "border-blue-400 shadow-md ring-2 ring-blue-100" : "border-slate-100 shadow-sm hover:shadow-md"
+        <div data-cy="room-card" className={`bg-white rounded-2xl border overflow-hidden transition-all duration-200 ${isSelected ? "border-blue-400 shadow-md ring-2 ring-blue-100" : "border-slate-100 shadow-sm hover:shadow-md"
             } ${!room.isAvailable ? "opacity-60" : ""}`}>
             <div className="flex flex-col sm:flex-row">
                 {/* Photo */}
@@ -115,7 +115,7 @@ function RoomCard({ room, isSelected, onRoomSelect, onBook }: {
                         <h3 className="font-bold text-slate-800 mb-1">{room.name}</h3>
                         <p className="text-sm text-slate-500 mb-3 line-clamp-2">{room.description}</p>
                         <div className="flex flex-wrap gap-3 text-xs text-slate-500 mb-3">
-                            <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5 text-blue-500" />{room.capacity}</span>
+                            <span data-cy="room-capacity" className="flex items-center gap-1"><Users className="h-3.5 w-3.5 text-blue-500" />{room.capacity}</span>
                             <span className="flex items-center gap-1"><Maximize2 className="h-3.5 w-3.5 text-blue-500" />{room.size}</span>
                             <span className="flex items-center gap-1"><BedDouble className="h-3.5 w-3.5 text-blue-500" />{room.bedInfo}</span>
                         </div>
@@ -132,13 +132,14 @@ function RoomCard({ room, isSelected, onRoomSelect, onBook }: {
                     </div>
                     <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
                         <div>
-                            <span className="text-xl font-bold text-blue-600">
+                            <span data-cy="room-price" className="text-xl font-bold text-blue-600">
                                 {room.pricePerNight.replace(" €/nuit", "")}
                             </span>
                             <span className="text-xs text-slate-400"> €/nuit</span>
                         </div>
                         <div className="flex gap-2">
                             <button
+                                data-cy="room-book-btn"
                                 disabled={!room.isAvailable}
                                 onClick={() => onRoomSelect(room.id)}
                                 className={`text-xs px-3 py-1.5 rounded-xl border font-semibold transition-colors disabled:opacity-50 ${isSelected
@@ -197,11 +198,10 @@ export function HotelDetailPage() {
     return (
         <div className="min-h-screen bg-slate-50">
 
-            {/* ── Galerie pleine largeur ── */}
-            <div className="relative">
+            <div className="relative" data-cy="hotel-gallery">
                 <GalleryGrid images={vm.images} name={vm.name} />
-                {/* Bouton retour flottant sur la galerie */}
                 <button
+                    data-cy="back-btn"
                     onClick={() => navigate(-1)}
                     className="absolute top-4 left-4 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-slate-700 text-sm font-semibold px-3 py-2 rounded-xl shadow hover:bg-white transition-colors"
                 >
@@ -220,8 +220,8 @@ export function HotelDetailPage() {
                         {/* Nom + étoiles + note */}
                         <div>
                             <div className="flex items-start justify-between gap-4 mb-2">
-                                <h1 className="text-3xl font-bold text-slate-800 leading-tight">{vm.name}</h1>
-                                <div className="shrink-0 text-right">
+                                <h1 data-cy="hotel-name" className="text-3xl font-bold text-slate-800 leading-tight">{vm.name}</h1>
+                                <div className="shrink-0 text-right" data-cy="hotel-stars">
                                     <div className="flex justify-end mb-1">
                                         {Array.from({ length: vm.stars }).map((_, i) => (
                                             <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
@@ -242,13 +242,13 @@ export function HotelDetailPage() {
                         </div>
 
                         {/* Description */}
-                        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+                        <div data-cy="hotel-description" className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                             <h2 className="font-bold text-slate-800 mb-2">À propos</h2>
                             <p className="text-slate-600 leading-relaxed text-sm">{vm.description}</p>
                         </div>
 
                         {/* Équipements */}
-                        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+                        <div data-cy="hotel-amenities" className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
                             <h2 className="font-bold text-slate-800 mb-4">Équipements</h2>
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                 {vm.amenities.map((a) => (
@@ -352,7 +352,6 @@ export function HotelDetailPage() {
     );
 }
 
-/* ── Galerie mosaïque ── */
 function GalleryGrid({ images, name }: { images: string[]; name: string }) {
     const FALLBACK = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800";
     const display = [...images, ...Array(Math.max(0, 5 - images.length)).fill(FALLBACK)].slice(0, 5);

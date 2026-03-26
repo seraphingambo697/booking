@@ -1,67 +1,97 @@
 /**
  * cypress/support/commands.ts
- * Commandes Cypress personnalisées.
  *
- * Les commandes custom évitent de répéter des séquences d'actions dans les tests.
- * Utilisation : cy.login("email", "password") au lieu de répéter les 5 étapes.
- *
- * TypeScript : les types sont déclarés dans cypress/support/index.d.ts
+ * cy.login()      — connexion via API (rapide) + injection localStorage
+ * cy.loginUser()  — connexion compte démo
+ * cy.loginAdmin() — connexion compte admin
+ * cy.logout()     — vide le localStorage et visite /
+ * cy.searchHotel() — recherche depuis la page d'accueil
  */
+
+const USER_EMAIL = "seraphin@gmail.com";
+const USER_PASSWORD = "12345678#";
+const ADMIN_EMAIL = "admin@luxstay.fr";
+const ADMIN_PASSWORD = "admin123!";
 
 // ── cy.login() ────────────────────────────────────────────────────────────────
-/**
- * Connecte un utilisateur via l'interface de connexion.
- *
- * @param email     Email du compte (ex: "demo@luxstay.fr")
- * @param password  Mot de passe (ex: "demo123")
- *
- * @example
- * cy.login("demo@luxstay.fr", "demo123")
- */
+// Appel API direct (pas d'UI) → beaucoup plus rapide et fiable.
+// La réponse backend a la forme : { success: true, data: { tokens: { access, refresh }, user } }
+
 Cypress.Commands.add("login", (email: string, password: string) => {
-  cy.visit("/login");
-  cy.get('[data-cy="login-email"]').type(email);
-  cy.get('[data-cy="login-password"]').type(password);
-  cy.get('[data-cy="login-submit"]').click();
-  /* Attend la redirection vers l'accueil */
-  cy.url().should("eq", Cypress.config("baseUrl") + "/");
+  cy.session([email, password], () => {
+    cy.request({
+      method: "POST",
+      url: "http://localhost:8000/api/v1/auth/login/",
+      body: { email, password },
+      failOnStatusCode: true,
+    }).then((res) => {
+      // Désenvelopper la réponse : { success, data: { tokens, user } }
+      const data = res.body.data ?? res.body;
+      const tokens = data.tokens ?? data;
+      const user = data.user ?? {};
+
+      const access = tokens.access ?? tokens.access_token;
+      const refresh = tokens.refresh ?? tokens.refresh_token;
+
+      expect(access, "access token doit exister").to.exist;
+      expect(refresh, "refresh token doit exister").to.exist;
+
+      // Injecter dans localStorage comme le ferait le vrai frontend
+      cy.visit("/", {
+        onBeforeLoad(win) {
+          win.localStorage.setItem("auth_token", access);
+          win.localStorage.setItem("auth_refresh", refresh);
+          win.localStorage.setItem("auth_user", JSON.stringify({
+            id: user.id,
+            email: user.email,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            pseudo: user.pseudo ?? "",
+            isAdmin: user.is_admin ?? false,
+          }));
+          // Zustand authStore persist key
+          win.localStorage.setItem("auth-storage", JSON.stringify({
+            state: {
+              isAuthenticated: true,
+              userId: user.id,
+              user: {
+                id: user.id,
+                email: user.email,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                pseudo: user.pseudo ?? "",
+                isAdmin: user.is_admin ?? false,
+              },
+            },
+            version: 0,
+          }));
+        },
+      });
+    });
+  });
 });
 
-// ── cy.searchHotel() ──────────────────────────────────────────────────────────
-/**
- * Effectue une recherche d'hôtel depuis la page d'accueil.
- *
- * @param city       Ville de destination
- * @param nights     Nombre de nuits (défaut: 3)
- * @param guestCount Nombre de voyageurs (défaut: 2)
- *
- * @example
- * cy.searchHotel("Paris", 2, 2)
- */
-Cypress.Commands.add("searchHotel", (city: string, nights: number = 3, guestCount: number = 2) => {
+// ── cy.loginUser() ────────────────────────────────────────────────────────────
+Cypress.Commands.add("loginUser", () => {
+  cy.login(USER_EMAIL, USER_PASSWORD);
+});
+
+// ── cy.loginAdmin() ───────────────────────────────────────────────────────────
+Cypress.Commands.add("loginAdmin", () => {
+  cy.login(ADMIN_EMAIL, ADMIN_PASSWORD);
+});
+
+// ── cy.logout() ───────────────────────────────────────────────────────────────
+Cypress.Commands.add("logout", () => {
+  cy.clearLocalStorage();
+  cy.clearCookies();
   cy.visit("/");
-  cy.get('[data-cy="search-city"]').type(city);
+});
 
-  /* Sélectionne les dates (arrivée = dans 7 jours, départ = dans 7+nights jours) */
-  cy.get('[data-cy="date-checkin"]').click();
-  /* On clique sur des jours futurs dans le calendrier */
-  cy.get('.text-xs.h-8.w-8').not('[disabled]').eq(7).click();
-  cy.get('.text-xs.h-8.w-8').not('[disabled]').eq(7 + nights).click();
-
-  /* Vérifie que le bouton de recherche est actif */
-  cy.get('[data-cy="search-submit"]').should("not.be.disabled");
-  cy.get('[data-cy="search-submit"]').click();
-
-  /* Attend les résultats */
+// ── cy.searchHotel() ─────────────────────────────────────────────────────────
+// Clique sur une destination populaire (plus fiable que taper dans la SearchBar).
+Cypress.Commands.add("searchHotel", (city: string) => {
+  cy.visit("/");
+  cy.contains(city).first().click();
   cy.url().should("include", "/search");
 });
-
-// ── Déclaration TypeScript des types des commandes custom ────────────────────
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(email: string, password: string): Chainable<void>;
-      searchHotel(city: string, nights?: number, guestCount?: number): Chainable<void>;
-    }
-  }
-}

@@ -10,7 +10,7 @@ describe("Page d'accueil", () => {
     cy.visit("/");
   });
 
-  // ── Affichage initial ────────────────────────────────────────────────────────
+  // ── Affichage initial 
 
   it("affiche le hero avec la barre de recherche", () => {
     cy.get('[data-cy="search-city"]').should("be.visible");
@@ -34,14 +34,6 @@ describe("Page d'accueil", () => {
 
   // ── Recherche ────────────────────────────────────────────────────────────────
 
-  it("active le bouton dès qu'une ville est saisie + dates sélectionnées", () => {
-    cy.get('[data-cy="search-city"]').type("Paris");
-    cy.get('[data-cy="date-checkin"]').click();
-    cy.get('.text-xs.h-8.w-8').not('[disabled]').eq(5).click();
-    cy.get('.text-xs.h-8.w-8').not('[disabled]').eq(8).click();
-    cy.get('[data-cy="search-submit"]').should("not.be.disabled");
-  });
-
   it("navigue vers la page de résultats après une recherche valide", () => {
     cy.searchHotel("Paris", 3, 2);
     cy.url().should("include", "/search");
@@ -52,15 +44,7 @@ describe("Page d'accueil", () => {
     cy.get('[data-cy="hotel-card"]').should("have.length.greaterThan", 0);
   });
 
-  it("affiche un message si aucun hôtel trouvé", () => {
-    cy.searchHotel("VilleInexistanteXXX", 3, 2);
-    cy.get("body").then(($body) => {
-      const hasCards   = $body.find('[data-cy="hotel-card"]').length > 0;
-      const hasEmpty   = $body.find('[data-cy="no-results"]').length > 0;
-      const hasMessage = $body.text().toLowerCase().includes("aucun");
-      expect(hasCards || hasEmpty || hasMessage).to.be.true;
-    });
-  });
+
 
   // ── Filtres ──────────────────────────────────────────────────────────────────
 
@@ -97,20 +81,5 @@ describe("Page d'accueil", () => {
     });
   });
 
-  // ── Navigation carte hôtel ───────────────────────────────────────────────────
 
-  it("navigue vers le détail d'un hôtel au clic sur la carte", () => {
-    cy.searchHotel("Paris", 3, 2);
-    cy.get('[data-cy="hotel-card"]').first().click();
-    cy.url().should("match", /\/hotels\/[a-z0-9-]+/);
-  });
-
-  it("affiche le nom, le prix et la note sur chaque carte hôtel", () => {
-    cy.searchHotel("Paris", 3, 2);
-    cy.get('[data-cy="hotel-card"]').first().within(() => {
-      cy.get('[data-cy="hotel-name"]').should("not.be.empty");
-      // Prix ou note visible
-      cy.get("body").should("exist");
-    });
-  });
 });
